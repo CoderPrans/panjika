@@ -37,6 +37,7 @@ a:hover {
 .wrapper .flex {
     display: flex;
     justify-content: space-between;
+    padding: 0 20px;
 }
 
 .flex p {
