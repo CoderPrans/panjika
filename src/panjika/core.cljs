@@ -41,6 +41,7 @@
    [:p {:style {:text-align "center"}} (calc/get-masa) " Masa"]
    [main]
    [tithi-until]
+   [:br ]
    [main-rest]])
 
 ;; -------------------------

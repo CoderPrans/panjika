@@ -19,12 +19,13 @@
          inst (.getTime dt)]
     (if (not (= (int td) idx))
       (let [tl (t-long (js/Date. inst))]
-        (recur tl (+ 1000 inst)))
+        (recur tl (+ (* 1000 60) inst)))
       (js/Date. inst))))
 
 (defn next-tithi [dt]
   (let [diff (t-long dt)]
     (to-tithi (inc (int diff)) diff dt)))
+
 
                                         ; Tithi
 
