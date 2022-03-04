@@ -48,10 +48,11 @@
 (defn get-nakshatra [dt]
   (let [to-asvini (- (moon-long dt) 30)
         index (/ to-asvini (/ 360 27))]
-    (str (const/nakshatras index) " (" (.toFixed index 5) ")")))
+    (str (const/nakshatras (if (> index 0) index (+ 27 index)))
+         " (" (.toFixed index 5) ")")))
 
 (get-nakshatra (js/Date.))
-;; => "Hastra (12.83434)"
+;; => "U.Bhadrapada (-1.54381)"
 
                                         ; Masa
 
