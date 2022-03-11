@@ -63,7 +63,7 @@
                             inst (.getTime (js/Date.))]
                        (if (not (= (int td) 14))
                          (let [tl (t-long (js/Date. inst))]
-                           (recur tl (+ (* 1000 60 60 24) inst)))
+                           (recur tl (+ (* 1000 60 60) inst)))
                          (js/Date. inst)))
         
         naks-index (.indexOf
@@ -72,9 +72,9 @@
                         (clojure.string/split " ")
                         first))
         mas #(const/nks_mas (get const/nakshatras %))]
+    #_(mas (- naks-index 1))
     (or (mas naks-index)
-        (mas (inc naks-index))
-        (mas (dec naks-index)))))
+        (mas (inc naks-index)))))
 
 (get-masa)
 ;; => "Phalgun"
@@ -92,5 +92,23 @@
 
 
 (comment
+(let [next-purnima (loop [td (t-long (js/Date.))
+                            inst (.getTime (js/Date.))]
+                       (if (not (= (int td) 14))
+                         (let [tl (t-long (js/Date. inst))]
+                           (recur tl (+ (* 1000 60 60) inst)))
+                         (js/Date. inst)))
+        
+        naks-index (.indexOf
+                    const/nakshatras
+                    (-> (get-nakshatra next-purnima)
+                        (clojure.string/split " ")
+                        first))
+        mas #(const/nks_mas (get const/nakshatras %))]
+  (str
+       (get const/nakshatras (- naks-index 1)) " "
+       (get const/nakshatras naks-index) " "
+       (get const/nakshatras (+ naks-index 1))))
 
-  )
+
+)
