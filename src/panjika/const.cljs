@@ -4,7 +4,7 @@
 
 (def nakshatras ["Ashwini", "Bharini", "Krittika", "Rohini", "Mrigashirasa", "Ardra", "Punarvasu", "Pushya", "Aslesha", "Magha", "P.Phalguni", "U.Phalguni", "Hastra", "Chitra", "Svati", "Visakha", "Anuradha", "Jyestha", "Mula", "P.Asadha", "U.Asadha", "Sravana", "Dhanistha", "Satabhisha", "P.Bhadrapada", "U.Bhadrapada", "Revati"])
 
-(def rashis ["Meen", "Mesha", "Vrishabha", "Mithuna", "Karka", "Simha", "Kanya", "Tula", "Vrischika", "Dhanu", "Capricorn", "Aquarius"])
+(def rashis ["Meen", "Mesha", "Vrishabha", "Mithuna", "Karka", "Simha", "Kanya", "Tula", "Vrischika", "Dhanu", "Makara", "Kumbha"])
 
 (def nks_mas {"Chitra" "Chait"
               "Visakha" "Vaisakh"
