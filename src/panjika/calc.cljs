@@ -35,7 +35,7 @@
 (defn get-tithi [dt]
   (let [diff (t-long dt)]
     (str (if (> diff 14) "Krshn" "Shukl") " "
-         (const/tithis diff) " (" (-> diff Math/abs (mod 1) (.toFixed 5)) ")")))
+         (const/tithis diff) " (" (-> diff (mod 1) (.toFixed 5)) ")")))
 
 
 (get-tithi (js/Date.))
@@ -49,7 +49,7 @@
   (let [to-asvini (- (moon-long dt) 30)
         index (/ to-asvini (/ 360 27))]
     (str (const/nakshatras (if (> index 0) index (+ 27 index)))
-         " (" (-> index Math/abs (mod 1) (.toFixed 5)) ")")))
+         " (" (-> index (mod 1) (.toFixed 5)) ")")))
 
 (get-nakshatra (js/Date.))
 ;; => "U.Bhadrapada (-1.54381)"
@@ -85,7 +85,7 @@
 
 (defn get-rashi [dt]
   (let [index (/ (moon-long dt) 30)]
-    (str (const/rashis index) " (" (-> index Math/abs (mod 1) (.toFixed 5)) ")")))
+    (str (const/rashis index) " (" (-> index (mod 1) (.toFixed 5)) ")")))
 
 (get-rashi (js/Date.))
 ;; => "Kanya (6.70434)"
