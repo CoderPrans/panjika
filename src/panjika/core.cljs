@@ -25,15 +25,13 @@
     [:p (calc/get-rashi @date-now)]]])
 
 (defn tithi-until []
-  (let [dt (js/Date.)
-        tthi (calc/get-tithi (js/Date.))]
+  (let [dt (js/Date.)]
     [:div
      [:div {:style {:text-align "right"
                     :margin-right "20px"
-                    :font-size "12px"}}
-      [:span "until "]
+                    :font-size "13px"}}
+      [:span {:style {:font-size "11px"}} "until "]
       (subs (str (calc/next-tithi dt)) 4 21)]]))
-
 
 (defn home-page []
   [:div

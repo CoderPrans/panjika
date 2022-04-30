@@ -23,10 +23,13 @@
       (js/Date. inst))))
 
 (defn next-tithi [dt]
-  (let [diff (t-long dt)]
-    (to-tithi (inc (int diff)) diff dt)))
+  (let [diff (t-long dt)
+        diff-int (int diff)]
+    (to-tithi
+     (if (< diff-int 29) (inc diff-int) 0)
+     diff dt)))
 
-
+(next-tithi (js/Date.))
                                         ; Tithi
 
 ;; The Ecliptic Longitude of Moon relative to Sun, in 30 segments
@@ -34,7 +37,11 @@
 
 (defn get-tithi [dt]
   (let [diff (t-long dt)]
-    (str (if (> diff 14) "Krshn" "Shukl") " "
+    (str #_(if (> diff 14) "Krshn" "Shukl")
+         (cond (= (int diff) 14) "" ;; Purnima
+               (= (int diff) 29) "" ;; Amavasya
+               (> diff 14) "Krshn" :else "Shukl")
+         " "
          (const/tithis diff) " (" (-> diff (mod 1) (.toFixed 5)) ")")))
 
 
