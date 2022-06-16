@@ -31,11 +31,12 @@
                     :margin-right "20px"
                     :font-size "13px"}}
       [:span {:style {:font-size "11px"}} "until "]
-      (subs (str (calc/next-tithi dt)) 4 21)]]))
+      (subs (str (calc/next-tthi)) 4 21)]]))
 
 (defn home-page []
   [:div
    [:h2 {:style {:padding-left "20px"}} "Panjika"]
+   ;"Draw a chart here.
    [:p {:style {:text-align "center"}} (calc/get-masa) " Masa"]
    [main]
    [tithi-until]
