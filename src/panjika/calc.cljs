@@ -48,18 +48,18 @@
 (get-tithi (js/Date.))
 ;; => "Krshn Tritiya (0.85930)"
 
-(defn next-tthi []
-  (let [time-now (js/Date.)
-        get-diff #(int (float (/ (pair-long %)
-                                tithi-long-factor)))
-        diff-ind (get-diff time-now)
-        idx (if (< diff-ind 29) (inc diff-ind) 0)]
-    (loop [td diff-ind
-           inst (.getTime time-now)]
-      (if-not (= idx td)
-        (let [pl (get-diff (js/Date. inst))]
-          (recur pl (+ (* 1000 60) inst)))
-        (js/Date. inst)))))
+;; (defn next-tthi []
+;;   (let [time-now (js/Date.)
+;;         get-diff #(int (float (/ (pair-long %)
+;;                                 tithi-long-factor)))
+;;         diff-ind (get-diff time-now)
+;;         idx (if (< diff-ind 29) (inc diff-ind) 0)]
+;;     (loop [td diff-ind
+;;            inst (.getTime time-now)]
+;;       (if-not (= idx td)
+;;         (let [pl (get-diff (js/Date. inst))]
+;;           (recur pl (+ (* 1000 60) inst)))
+;;         (js/Date. inst)))))
 
 ;; (defn to-tithi [idx diff dt]
 ;;   (loop [td diff

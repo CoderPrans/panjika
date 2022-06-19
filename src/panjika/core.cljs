@@ -15,7 +15,7 @@
              :panjika (calc/for-dt date-now)})))
 
 
-(defn tithi-until []
+#_(defn tithi-until []
   (let [dt (js/Date.)]
     [:div
      [:div {:style {:text-align "right"
@@ -62,7 +62,7 @@
      [:div.wrapper
       [:div {:class "flex"} [:p "Tithi: "]
        [:p (:tithi (:panjika @store))]]
-      [tithi-until] [:br ]
+      #_[tithi-until] [:br ]
 
       [:div {:class "flex"} [:p "Naksh: "]
        [:p (:naks (:panjika @store))]]
