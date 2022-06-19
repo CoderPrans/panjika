@@ -103,52 +103,53 @@
 
 ;; Naskhatra on the next purnima
 
-;; (defn get-masa [dt]
-;;   (let [nks #(first (clojure.string/split (get-nakshatra %) " "))
-;;         purnima-time #(:date )
-;;         next-purnima-entry
-;;         (:date (js-parse (astronomy/SearchMoonPhase 180 dt 30)))
-;;         next-purnima-exit
-;;         (:date (js-parse (astronomy/SearchMoonPhase 192 dt 32)))
-;;         entry-nks (first (clojure.string/split (get-nakshatra next-purnima-entry) " "))
-;;         exit-nks ()]
-;;     #_{next-purnima-entry (get-nakshatra next-purnima-entry)
-;;        next-purnima-exit (get-nakshatra next-purnima-exit)}
-;;     ))
-;; (get-masa (js/Date. 2022 5 19))
+(defn get-masa [dt]
+  (let [nks #(first (clojure.string/split (get-nakshatra %) " "))
+        purnima-time #(:date (js-parse (astronomy/SearchMoonPhase % dt 30)))
+        next-purnima-entry (purnima-time 180)
+        next-purnima-exit (purnima-time 192)
+        entry-nks (nks next-purnima-entry)
+        exit-nks (nks next-purnima-exit)]
+    #_{next-purnima-entry entry-nks
+       next-purnima-exit exit-nks}
+    (or (const/nks_mas entry-nks)
+        (const/nks_mas (const/nakshatras (dec (.indexOf const/nakshatras entry-nks)))))))
+
+(get-masa (js/Date. 2022 5 19))
+;; => "Asadha"
 ;; => {#inst "2022-07-13T18:38:04.131-00:00" "U.Asadha (0.02871)", #inst "2022-07-14T14:47:14.637-00:00" "U.Asadha (0.98874)"}
 ;; (keys const/nks_mas)
 ;; (get-nakshatra (:date (js-parse (astronomy/SearchMoonPhase 180 (new js/Date 2022 9 15) 30))))
 
-(defn get-masa []
-  (let [time-now (js/Date.)
-        get-diff #(int (float (/ (pair-long %)
-                                tithi-long-factor)))
-        next-purnima (loop [td (get-diff time-now)
-                            inst (.getTime time-now)]
-                       (if (not (= td 14))
-                         (let [tl (get-diff (js/Date. inst))]
-                           (recur tl (+ (* 1000 60 60) inst)))
-                         (js/Date. inst)))
+;; (defn get-masa [dt]
+;;   (let [time-now dt
+;;         get-diff #(int (float (/ (pair-long %)
+;;                                 tithi-long-factor)))
+;;         next-purnima (loop [td (get-diff time-now)
+;;                             inst (.getTime time-now)]
+;;                        (if (not (= td 14))
+;;                          (let [tl (get-diff (js/Date. inst))]
+;;                            (recur tl (+ (* 1000 60 60 6) inst)))
+;;                          (js/Date. inst)))
         
-        naks-index (.indexOf
-                    const/nakshatras
-                    (-> (get-nakshatra next-purnima)
-                        (clojure.string/split " ")
-                        first))
-        mas #(const/nks_mas (get const/nakshatras %))]
-    #_(mas (- naks-index 1))
-    (or (mas naks-index)
-        (mas (inc naks-index)))))
+;;         naks-index (.indexOf
+;;                     const/nakshatras
+;;                     (-> (get-nakshatra next-purnima)
+;;                         (clojure.string/split " ")
+;;                         first))
+;;         mas #(const/nks_mas (get const/nakshatras %))]
+;;     #_(mas (- naks-index 1))
+;;     (or (mas naks-index)
+;;         (mas (inc naks-index)))))
 
-(get-masa)
 ;; => "Asadha"
 
                                         ; For Date Time
 (defn for-dt [dt]
   (hash-map :naks (get-nakshatra dt)
             :tithi (get-tithi dt)
-            :rashi (get-rashi dt)))
+            :rashi (get-rashi dt)
+            :masa (get-masa dt)))
 
 (for-dt (new js/Date 2005 7 16 11 26))
 ;; => {:rashi "Dhanu (0.33321)",

@@ -57,7 +57,7 @@
 
      [set-time]
 
-     [:p {:style {:text-align "center"}} (calc/get-masa) " Masa"]
+     [:p {:style {:text-align "center"}} (:masa (:panjika @store)) " Masa"]
 
      [:div.wrapper
       [:div {:class "flex"} [:p "Tithi: "]
