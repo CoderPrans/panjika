@@ -2,7 +2,14 @@
   (:require ["astronomy-engine" :as astronomy]
             [panjika.const :as const]))
 
-(defn jkeys [x] (.keys js/Object x))
+(defn js-parse
+  "shallow convert typed js object into maps"
+  [x]
+  (let [keys (.keys js/Object x)
+        vals (.values js/Object x)]
+    (->> (map #(list %1 %2) keys vals)
+         flatten (apply hash-map)
+         clojure.walk/keywordize-keys)))
 
 (defn eclipticCoor [body date]
   (let [ec (-> body
@@ -96,6 +103,23 @@
 
 ;; Naskhatra on the next purnima
 
+;; (defn get-masa [dt]
+;;   (let [nks #(first (clojure.string/split (get-nakshatra %) " "))
+;;         purnima-time #(:date )
+;;         next-purnima-entry
+;;         (:date (js-parse (astronomy/SearchMoonPhase 180 dt 30)))
+;;         next-purnima-exit
+;;         (:date (js-parse (astronomy/SearchMoonPhase 192 dt 32)))
+;;         entry-nks (first (clojure.string/split (get-nakshatra next-purnima-entry) " "))
+;;         exit-nks ()]
+;;     #_{next-purnima-entry (get-nakshatra next-purnima-entry)
+;;        next-purnima-exit (get-nakshatra next-purnima-exit)}
+;;     ))
+;; (get-masa (js/Date. 2022 5 19))
+;; => {#inst "2022-07-13T18:38:04.131-00:00" "U.Asadha (0.02871)", #inst "2022-07-14T14:47:14.637-00:00" "U.Asadha (0.98874)"}
+;; (keys const/nks_mas)
+;; (get-nakshatra (:date (js-parse (astronomy/SearchMoonPhase 180 (new js/Date 2022 9 15) 30))))
+
 (defn get-masa []
   (let [time-now (js/Date.)
         get-diff #(int (float (/ (pair-long %)
@@ -147,6 +171,14 @@
   (astronomy/MoonPhase (js/Date.));; => 319.72937858834604
 
   (* 24 (float (/ 24 360)))
+
+  (let [{:keys [quarter]} (js-parse (astronomy/SearchMoonQuarter (js/Date.)))]
+    quarter)
+  (js-parse (astronomy/NextMoonQuarter (astronomy/SearchMoonQuarter (js/Date.))))
+
+  (js-parse (astronomy/SearchMoonPhase 180 (js/Date.) 30))
+
+  (apply hash-map (flatten (map #(list %1 %2) [1 2 3] [4 5 6])))
 
 
 )
