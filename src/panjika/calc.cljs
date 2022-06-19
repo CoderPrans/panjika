@@ -144,6 +144,17 @@
 (get-masa)
 ;; => "Asadha"
 
+                                        ; For Date Time
+(defn for-dt [dt]
+  (hash-map :naks (get-nakshatra dt)
+            :tithi (get-tithi dt)
+            :rashi (get-rashi dt)))
+
+(for-dt (new js/Date 2005 7 16 11 26))
+;; => {:rashi "Dhanu (0.33321)",
+;;     :naks "Mula (0.74973)",
+;;     :tithi "Shukl Ekadashi (0.88295)"}
+
                                         ; EquatorialCoordinate chart
 
 #_(defn get-constellation [bodies]
@@ -180,5 +191,5 @@
 
   (apply hash-map (flatten (map #(list %1 %2) [1 2 3] [4 5 6])))
 
-
 )
+;; => nil
