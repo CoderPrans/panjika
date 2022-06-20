@@ -29,8 +29,16 @@
   (Math/abs (- (:lon (eclipticCoor "Moon" dt))
                (:lon (eclipticCoor "Sun" dt)))))
 
-(pair-long (js/Date.))
-;; => 213.8592086369461
+;; (pair-long (js/Date. "2022-06-21T09:40"))
+(let [dt (js/Date. "2022-06-21T09:40")]
+  [dt (:lon (eclipticCoor "Moon" dt))
+   (:lon (eclipticCoor "Sun" dt))])
+;; => [#inst "2022-06-21T04:10:00.000-00:00" 359.99241525432694 89.49395730724663]
+;; => [#inst "2022-06-21T04:11:00.000-00:00" 0.001580926007934 89.4946199599948]
+;; bit of a pickle. diff drops from 270.4 to 89.5 in 1 min.
+
+;; (astronomy/MoonPhase (js/Date. "2022-06-21T09:41"))
+;; => 270.50696096601314
 
                                         ; Tithi
 
@@ -38,15 +46,13 @@
 (def tithi-long-factor 12)
 
 (defn get-tithi [dt]
-  (let [diff-ind (float (/ (pair-long dt)
+  (let [diff-ind (float (/ #_(pair-long dt)
+                           (astronomy/MoonPhase dt)
                            tithi-long-factor))]
-    (str (const/tithis diff-ind)
-         " ("
-         (-> diff-ind (mod 1) (.toFixed 5))
-         ")")))
+    (vector (const/tithis diff-ind) (mod diff-ind 1))))
 
 (get-tithi (js/Date.))
-;; => "Krshn Tritiya (0.85930)"
+;; => ["Krshn Ashtami" 0.14506025311429838]
 
 ;; (defn next-tthi []
 ;;   (let [time-now (js/Date.)
@@ -79,11 +85,12 @@
   (let [to-asvini (- (:lon (eclipticCoor "Moon" dt))
                      ayanmasa)
         index (/ to-asvini (/ 360 27))]
-    (str (const/nakshatras (if (> index 0) index (+ 27 index)))
-         " (" (-> index (mod 1) (.toFixed 5)) ")")))
+    (vector
+     (const/nakshatras (if (> index 0) index (+ 27 index)))
+     (mod index 1))))
 
 (get-nakshatra (js/Date.))
-;; => "U.Asadha (0.67065)"
+;; => ["P.Bhadrapada" 0.815165141513404]
                                         ; Rashi
 
 ;; Ecliptic Longitude of Moon, in 27 segments
@@ -92,11 +99,12 @@
   (let [to-mesha (- (:lon (eclipticCoor "Moon" dt))
                      ayanmasa)
         index (/ to-mesha 30)]
-    (str (const/rashis index)
-         " (" (-> index (mod 1) (.toFixed 5)) ")")))
+    (vector
+     (const/rashis (if (> index 0) index (+ 12 index)))
+     (mod index 1))))
 
 (get-rashi (js/Date.))
-;; => "Dhanu (0.97724)"
+;; => ["Meen (♓︎︎ Pices︎)" 0.02920287584933412]
 
 
                                         ; Masa
@@ -104,7 +112,7 @@
 ;; Naskhatra on the next purnima
 
 (defn get-masa [dt]
-  (let [nks #(first (clojure.string/split (get-nakshatra %) " "))
+  (let [nks #(first (get-nakshatra %))
         purnima-time #(:date (js-parse (astronomy/SearchMoonPhase % dt 30)))
         next-purnima-entry (purnima-time 180)
         next-purnima-exit (purnima-time 192)
@@ -152,9 +160,10 @@
             :masa (get-masa dt)))
 
 (for-dt (new js/Date 2005 7 16 11 26))
-;; => {:rashi "Dhanu (0.33321)",
-;;     :naks "Mula (0.74973)",
-;;     :tithi "Shukl Ekadashi (0.88295)"}
+;; => {:rashi ["Dhanu (♐︎ Sagittarius)" 0.3332128031711541],
+;;     :naks ["Mula" 0.7497288071350958],
+;;     :tithi ["Shukl Ekadashi" 0.8829464774393525],
+;;     :masa "Sravana"}
 
                                         ; EquatorialCoordinate chart
 
@@ -192,5 +201,7 @@
 
   (apply hash-map (flatten (map #(list %1 %2) [1 2 3] [4 5 6])))
 
+  (get-tithi (js/Date. "2022-06-21T01:49"))
+  
 )
 ;; => nil

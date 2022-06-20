@@ -15,30 +15,37 @@
              :panjika (calc/for-dt date-now)})))
 
 
-#_(defn tithi-until []
-  (let [dt (js/Date.)]
-    [:div
-     [:div {:style {:text-align "right"
-                    :margin-right "20px"
-                    :font-size "13px"}}
-      [:span {:style {:font-size "11px"}} "until "]
-      (subs (str (calc/next-tthi)) 4 21)]]))
-
-
 (defn set-time []
   (let [in-val (r/atom nil)]
     (fn []
       [:div {:style {:display "flex" :justify-content "center" :margin "30px"}}
-       [:input {:type "datetime-local"
-                :value @in-val
-                :on-change (fn [e] (reset! in-val (.-value (.-target e))))
-                :style {:width "170px"}
-                }]
-       [:button {:style {:margin-left "10px"
-                         :padding "3px 10px"}
-                 :on-click (fn [e] (swap! store assoc
-                                          :date-now (js/Date. @in-val)))
-                 :disabled (nil? @in-val)} "Change"]])))
+       [:input.set-date {:type "datetime-local"
+                         :value @in-val
+                         :on-change (fn [e] (reset! in-val (.-value (.-target e))))}]
+       [:button.date-btn {:on-click (fn [e] (swap! store assoc
+                                                   :date-now (js/Date. @in-val)))
+                          :disabled (nil? @in-val)} "Change"]])))
+
+
+(defn progress [flt]
+  [:div#progress-circle
+   {:style {:background
+            (str
+             "radial-gradient(#082b3f 50%, transparent 51%),"
+             "conic-gradient(transparent 0deg " (* 360 flt) "deg, #082b3f " (* 360 flt) "deg 360deg),"
+             "conic-gradient(#f4f6f0 0deg, #f4f6f0 360deg)"
+             )}} [:span (subs (str (.toFixed flt 2)) 2) "%"]])
+
+
+(defn segment-view [strg keyw]
+  [:div {:class "flex"} [:p strg]
+   [:p (if (= strg "Maasa: ")
+         [:span {:style {:margin-right "42px"}}
+          (keyw (:panjika @store))]
+         (let [[txt fctr] (keyw (:panjika @store))]
+           [:span {:style {:display "flex" :align-items "center"}}
+            [:span {:style {:margin-right "12px"}} txt]
+            (progress fctr)]))]])
 
 
 (defn main []
@@ -54,20 +61,14 @@
     [:div
      [:h2 {:style {:padding-left "20px"}} "Panjika"]
      ;;"Draw a chart here.
-
      [set-time]
 
-     [:p {:style {:text-align "center"}} (:masa (:panjika @store)) " Masa"]
-
      [:div.wrapper
-      [:div {:class "flex"} [:p "Tithi: "]
-       [:p (:tithi (:panjika @store))]]
-      #_[tithi-until] [:br ]
-
-      [:div {:class "flex"} [:p "Naksh: "]
-       [:p (:naks (:panjika @store))]]
-      [:div {:class "flex"} [:p "Rashi: "]
-       [:p (:rashi (:panjika @store))]]
+      [:div {:style {:margin-bottom "8px"}}
+       (segment-view "Maasa: " :masa)]
+      (segment-view "Tithi: " :tithi)
+      (segment-view "Naksh: " :naks)
+      (segment-view "Rashi: " :rashi)
       ]]))
 
 

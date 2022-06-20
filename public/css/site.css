@@ -4,12 +4,12 @@ body {
   background: #000;
   background-image: linear-gradient(130deg,#000608 33%,#082b3f 67%);
   background-repeat: no-repeat;
-  max-width: 600px;
+  max-width: 500px;
   height: 96.5vh;
   margin: 0 auto;
   padding-top: 22px;
   -webkit-font-smoothing: antialiased;
-  font-size: 1.125em;
+  font-size: 16px;
   color: #f3f3f3;
   line-height: 1.5em;
 }
@@ -46,4 +46,32 @@ a:hover {
 
 .flex p {
     margin: 5px 0;
+}
+::-webkit-calendar-picker-indicator { background:#f3f3f3; }
+input.set-date {
+    width: 170px;
+    background: transparent;
+    color: #f3f3f3;
+    border: 1px solid #f3f3f3;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+button.date-btn {
+    margin-left: 10px;
+    padding: 3px 10px;
+    border-radius: 5px;
+    border: 1px solid #000608;
+}
+
+#progress-circle {
+    position: relative;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+#progress-circle span {
+    position: absolute;
+    font-size: 11px;
+    top: 4px;
+    left: 5px;
 }
