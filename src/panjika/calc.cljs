@@ -67,14 +67,6 @@
 ;;           (recur pl (+ (* 1000 60) inst)))
 ;;         (js/Date. inst)))))
 
-;; (defn to-tithi [idx diff dt]
-;;   (loop [td diff
-;;          inst (.getTime dt)]
-;;     (if (not (= (int td) idx))
-;;       (let [tl (t-long (js/Date. inst))]
-;;         (recur tl (+ (* 1000 60) inst)))
-;;       (js/Date. inst))))
-
 (def ayanmasa 24) ; the angle b/w tropical & sidereal 0deg
 
                                         ; Nakshatra
@@ -202,6 +194,14 @@
   (apply hash-map (flatten (map #(list %1 %2) [1 2 3] [4 5 6])))
 
   (get-tithi (js/Date. "2022-06-21T01:49"))
-  
+
+  (let [ujjain (new astronomy/Observer 75.78 23.17 0)
+        else (new astronomy/Observer -39 72 0)
+        eq #(:ra (js-parse (astronomy/Equator "Sun" (js/Date.) % false false)))]
+    [(eq ujjain) (eq else)]);; => [6.075787320319758 6.075816553976948]
+
+  (js-parse (astronomy/Equator "Sun" (js/Date.) (new astronomy/Observer 0 0 0) false false))
+  ;; => {:vec #object[Vector [object Object]], :ra 6.075686172510978, :dist 1.0163391999787272, :dec 23.432006601419097}
+
 )
 ;; => nil

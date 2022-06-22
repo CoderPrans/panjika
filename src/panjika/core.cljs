@@ -3,7 +3,8 @@
       [reagent.core :as r]
       [reagent.dom :as d]
       ["astronomy-engine" :as astronomy]
-      [panjika.calc :as calc]))
+      [panjika.calc :as calc]
+      [panjika.chart :as chart]))
 
 ;; -------------------------
 ;; Views
@@ -62,6 +63,8 @@
      [:h2 {:style {:padding-left "20px"}} "Panjika"]
      ;;"Draw a chart here.
      [set-time]
+
+     [chart/chart-component (:date-now @store)]
 
      [:div.wrapper
       [:div {:style {:margin-bottom "8px"}}
