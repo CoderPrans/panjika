@@ -10,34 +10,40 @@
         eq #(let [{:keys [ra dec]}
                   (calc/js-parse (astronomy/Equator % dt observer false false))]
               {:ra ra :dec dec})]
-    #js {"body" body "ra" (:ra (eq body)) "dec" (:dec (eq body))}))
+    #js {"z" (if (= body "Moon") 50 1000)
+         "ra" (int (* (/ 360 24)
+                      (:ra (eq body))))
+         "dec" (:dec (eq body))}))
 
 (get-data "Moon" (js/Date.))
 ;; => #js {:body "Moon", :ra 1.3732008359451153, :dec 4.868361638408829}
 
-(def ScatterChart (r/adapt-react-class re/ScatterChart))
-(def XAxis (r/adapt-react-class re/XAxis))
-(def YAxis (r/adapt-react-class re/YAxis))
-(def Scatter (r/adapt-react-class re/Scatter))
-(def Cell (r/adapt-react-class re/Cell))
+(defn get-edata [body dt]
+  #js {"body" body
+       "lon" (:lon (calc/eclipticCoor body dt))
+       "lat" (:lat (calc/eclipticCoor body dt))})
+
+(def tick-style
+  {:fontSize "12px"
+   :color "silver"})
+
+(defn format-tick [label]
+  (str label "°"))
 
 (defn chart-component [dt]
   [:div
-   {:style {:width "400px"
-            :height "150px"
-            :margin "10px auto"}}
-   [ScatterChart {:width 400 :height 150 :margin {:top 0 :right 0 :left 0 :bottom 0}}
-    [XAxis {:type "number" :domain #js [0 24] :dataKey "ra" :name "Right Ascension" :unit "hr"}]
-    [YAxis {:type "number" :domain #js [-25 25] :dataKey "dec" :name "Declination" :unit "deg"}]
-    [Scatter {:name "A school" :data (map #(get-data % dt) ["Moon" "Sun"])}
-     (map (fn [en in]
-            [Cell {:key (str "cell-" in)
-                   :fill (if (= (.-body en) "Moon") "#fefcd7" "yellow")}])
-          (map #(get-data % dt) ["Moon" "Sun"]))]]
+   {:style {:width "320px" :height "120px" :margin "10px auto"}}
+   [:> re/ScatterChart {:width 320 :height 120
+                        :margin {:top 0 :right 30 :left -30 :bottom 0}}
+    [:> re/XAxis {:type "number" :domain #js [0 360] :dataKey "ra"
+                  :name "Right Ascension" :tick tick-style :tickFormatter #(format-tick %)}]
+    [:> re/YAxis {:type "number" :domain #js [-30 30] :dataKey "dec"
+                  :name "Declination" :ticks [0] :tick tick-style :tickFormatter #(format-tick %)}]
+    [:> re/ZAxis {:dataKey "z" :range [50 300]}]
+    [:> re/Scatter {:name "Surya" :data #js [(get-data "Sun" dt)] :fill "yellow"}]
+    [:> re/Scatter {:name "Chandra" :data #js [(get-data "Moon" dt)] :fill "#fefcd7"}]
+    ]
    ])
-(apply vector (map get-data ["Moon" "Sun"]))
-;; => [#js {:body "Moon", :ra 1.4170938159308841, :dec 5.166615721476313} #js {:body "Sun", :ra 6.080449216825982, :dec 23.429428743207737}]
 
-
-
-
+(get-data "Moon" (js/Date.))
+(get-data "Sun" (js/Date.))

@@ -73,30 +73,30 @@
 
 ;; Ecliptic Longitude of Moon, in 27 segments
 
-(defn get-nakshatra [dt]
-  (let [to-asvini (- (:lon (eclipticCoor "Moon" dt))
+(defn get-nakshatra [body dt]
+  (let [to-asvini (- (:lon (eclipticCoor body dt))
                      ayanmasa)
         index (/ to-asvini (/ 360 27))]
     (vector
      (const/nakshatras (if (> index 0) index (+ 27 index)))
      (mod index 1))))
 
-(get-nakshatra (js/Date.))
-;; => ["P.Bhadrapada" 0.815165141513404]
+(get-nakshatra "Moon" (js/Date.))
+;; => ["Krittika" 0.4694790879212025]
                                         ; Rashi
 
 ;; Ecliptic Longitude of Moon, in 27 segments
 
-(defn get-rashi [dt]
-  (let [to-mesha (- (:lon (eclipticCoor "Moon" dt))
+(defn get-rashi [body dt]
+  (let [to-mesha (- (:lon (eclipticCoor body dt))
                      ayanmasa)
         index (/ to-mesha 30)]
     (vector
      (const/rashis (if (> index 0) index (+ 12 index)))
      (mod index 1))))
 
-(get-rashi (js/Date.))
-;; => ["Meen (♓︎︎ Pices︎)" 0.02920287584933412]
+(get-rashi "Sun" (js/Date.))
+;; => ["Mithuna (♊︎ Gem.)" 0.32826329039507796]
 
 
                                         ; Masa
@@ -104,7 +104,7 @@
 ;; Naskhatra on the next purnima
 
 (defn get-masa [dt]
-  (let [nks #(first (get-nakshatra %))
+  (let [nks #(first (get-nakshatra "Moon" %))
         purnima-time #(:date (js-parse (astronomy/SearchMoonPhase % dt 30)))
         next-purnima-entry (purnima-time 180)
         next-purnima-exit (purnima-time 192)
@@ -146,16 +146,22 @@
 
                                         ; For Date Time
 (defn for-dt [dt]
-  (hash-map :naks (get-nakshatra dt)
-            :tithi (get-tithi dt)
-            :rashi (get-rashi dt)
+  (hash-map :tithi (get-tithi dt)
+            :sun {:naks (get-nakshatra "Sun" dt)
+                  :rashi (get-rashi "Sun" dt)}
+            :moon {:naks (get-nakshatra "Moon" dt)
+                   :rashi (get-rashi "Moon" dt)}
             :masa (get-masa dt)))
 
 (for-dt (new js/Date 2005 7 16 11 26))
-;; => {:rashi ["Dhanu (♐︎ Sagittarius)" 0.3332128031711541],
-;;     :naks ["Mula" 0.7497288071350958],
+;; => {:moon
+;;     {:naks ["Mula" 0.7497288071350958],
+;;      :rashi ["Dhanu (♐︎ Sag.)" 0.3332128031711541]},
+;;     :sun
+;;     {:naks ["Aslesha" 0.9550769774396777],
+;;      :rashi ["Karka (♋︎ Can.)" 0.9800342121954126]},
 ;;     :tithi ["Shukl Ekadashi" 0.8829464774393525],
-;;     :masa "Sravana"}
+;;     :masa "Shraavana"}
 
                                         ; EquatorialCoordinate chart
 
