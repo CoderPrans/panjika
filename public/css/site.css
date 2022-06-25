@@ -96,6 +96,7 @@ p {
     text-align: center;
     border-bottom: 1px solid #f3f3f3;
     cursor: pointer;
+    width: 56px;
 }
 .options {
     background: #efefef;

@@ -72,23 +72,18 @@
                     :panjika (calc/for-dt up-date)))
           1000))
 
-(def lapse-map {1 "1 sec" 60 "1 min" 3600 "1 hr"
-                86400 "1 day" 2592000 "1 mnth"})
+(def lapse-map {1 "1 sec" 3600 "1 hr" 86400 "1 day" 2592000 "1 mnth"})
 
 
 (defn time-lapse []
-  (let [expanded? (r/atom false)]
-    (fn [] 
-      [:div.time-lapse {:style {:height (if @expanded? "165px" "23.5px")}}
-       [:div [:p {:on-click #(swap! expanded? not)}
-              (lapse-map (:lapse @store))]
-        (for [x (vals lapse-map)]
-          [:p.options {:key x :on-click #(swap! store assoc :lapse
-                                        ((clojure.set/map-invert lapse-map) x))}
-           x])]
-       " /sec"])
-    )
-  )
+  [:div.time-lapse
+   [:p {:on-click #(swap! store assoc :lapse
+                          (case (@store :lapse)
+                            1 3600
+                            3600 86400
+                            86400 2592000
+                            2592000 1))}
+    (lapse-map (:lapse @store))] " /sec"])
 
 (defn main []
   #_(fn [])
