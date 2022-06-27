@@ -183,6 +183,24 @@
 ;;             ["Moon" "Sun"]))
 ;; => {:Sun {:ra 4.225829012729178, :dec 21.182852562375412}, :Moon {:ra 1.6658110006483537, :dec 7.086044700301664}}
 
+
+(#(let [observer (new astronomy/Observer 23.17 75.78 0)
+        {:keys [ra dec]} (js-parse (astronomy/Equator "Sun" % observer true false))
+        sun-alt ((js-parse (astronomy/Horizon % observer ra dec false)) :altitude)
+        from-east (if (>= (.getHours %) 12)
+                    (+ 90 (- 90 sun-alt))
+                    (if (>= sun-alt 0) sun-alt (+ 360 sun-alt)))
+        rashi (.indexOf const/rashis (first (get-rashi "Sun" %)))
+        passed (* 30 (last (get-rashi "Sun" %)))]
+    [(inc rashi) (- from-east passed) sun-alt])
+  (js/Date.))
+;; => [3 210.975843150844 -42.76093408231793]
+(.toString (js/Date.))
+;; => "Mon Jun 27 2022 23:54:45 GMT+0530 (India Standard Time)"
+
+;; Sun altitude -42deg at midnight ? should be -90
+
+
 (comment
   (.-elon (astronomy/SunPosition (js/Date.)));; => 65.60813882173356
   (.-lon (astronomy/EclipticGeoMoon (js/Date.)));; => 25.342441575024562

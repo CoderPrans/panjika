@@ -6,11 +6,11 @@
    [panjika.calc :as calc]))
 
 (defn get-data [body dt]
-  (let [observer (new astronomy/Observer 75.78 23.17 0)
+  (let [observer (new astronomy/Observer 23.17 75.78 0)
         eq #(let [{:keys [ra dec]}
-                  (calc/js-parse (astronomy/Equator % dt observer false false))]
+                  (calc/js-parse (astronomy/Equator % dt observer true false))]
               {:ra ra :dec dec})]
-    #js {"z" (if (= body "Moon") 50 1000)
+    #js {"z" (if (= body "Moon") 100 1000)
          "ra" (int (* (/ 360 24)
                       (:ra (eq body))))
          "dec" (:dec (eq body))}))
@@ -39,7 +39,7 @@
                   :name "Right Ascension" :tick tick-style :tickFormatter #(format-tick %)}]
     [:> re/YAxis {:type "number" :domain #js [-30 30] :dataKey "dec"
                   :name "Declination" :ticks [0] :tick tick-style :tickFormatter #(format-tick %)}]
-    [:> re/ZAxis {:dataKey "z" :range [50 300]}]
+    [:> re/ZAxis {:dataKey "z" :range [100 300]}]
     [:> re/Scatter {:name "Surya" :data #js [(get-data "Sun" dt)] :fill "yellow"}]
     [:> re/Scatter {:name "Chandra" :data #js [(get-data "Moon" dt)] :fill "#fefcd7"}]
     ]
