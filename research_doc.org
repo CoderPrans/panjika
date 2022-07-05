@@ -1,0 +1,70 @@
+
+Panchang (5 limbs)
+* Vara, Tithi, Nakshatra, Yoga, Karana
+* Time Division
+| 1 Prativipala  | -         | 0.006 seconds |
+| 60 Partivipala | 1 Vipala  | 0.4 seconds   |
+| 60 Vipalas     | 1 Pala    | 24 seconds    |
+| 60 Pala        | 1 Ghataka | 24 minutes    |
+| 60 Ghataka     | 1 Divasa  | 24 hours      |
+|----------------+-----------+---------------|
+| 10 Vipala      | 1 Prana   | 4 seconds     |
+| 6 Prana        | 1 Pala    | 24 seconds    |
+* Tithi
+- Time occupied by Moon, increasing distance from Sun by 12 degrees.
+- Amavasya (New Moon), diff b/w Sun & Moon is 0 deg
+- Purnima (Full Moon), diff b/w Sun & Moon is 180 deg
+* Nakshatra
+- 27th part of the Ecliptic.
+- each Nakshatra occupies 13 deg 20 mins (360/27)
+* Yoga
+- The period of time during which the joint motion in longitude, or the sum of the motions, of the sun and moon is increased by 13 deg 20 mins.
+* Karana
+- Half a tithi, time during which difference of the longitudes of the sun and moon is increased by 6 degress.
+
+* Rasi
+- 12th part of the Ecliptic.
+- 1 rasi is 2.25 Nakshatra
+
+* End Points of Nakshatra
+| Nakshatra    | Deg. Min. |
+|--------------+-----------|
+| Asvni        | 13, 20    |
+| Bharani      | 26, 40    |
+| Krittika     | 40, 0     |
+| Rohini       | 53, 20    |
+| Mrigasiras   | 66, 40    |
+| Ardra        | 80, 0     |
+| Punarvasu    | 93, 20    |
+| Pushya       | 106, 40   |
+| Aslesha      | 120, 40   |
+| Magha        | 133, 20   |
+| P.Phalguni   | 146, 40   |
+| U.Phalguni   | 160, 0    |
+| Hasta        | 173, 20   |
+| Chitra       | 186, 40   |
+| Svati        | 200, 0    |
+| Visakha      | 213, 20   |
+| Anuradha     | 226, 40   |
+| Jyestha      | 240, 0    |
+| Mula         | 253, 20   |
+| P.Asadha     | 266, 40   |
+| U.Asadha     | 280, 0    |
+| Sravana      | 293, 20   |
+| Dhanistha    | 306, 40   |
+| Satatranka   | 320, 0    |
+| P.Bhadrapada | 333, 20   |
+| U.Bhadrapada | 346, 40   |
+| Revati       | 360, 0    |
+
+* Calculation
+  Requirements: Moon Azm, Sun Azm
+
+** Tithi
+   long-diff: (- Moon Azimuth Sun Azimuth)
+   paksha: (if (> long-diff 0) "Shukla" "Krishna")
+   tithi: (->> (/ long-diff 12) Math/floor int)
+
+** Nakshatra
+   convert Azm to Ecliptic deg
+   divide by 13deg 20min or 60/8 (13.33333...4)
