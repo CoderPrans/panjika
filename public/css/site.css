@@ -1,41 +1,39 @@
-body {
-  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
+html, body {
+  /* font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif; */
   font-family: monospace;
-  background: #000;
-  background-image: linear-gradient(130deg,#000608 33%,#082b3f 67%);
-  background-repeat: no-repeat;
-  max-width: 500px;
-  height: 96.5vh;
-  margin: 0 auto;
-  padding-top: 22px;
+  /* background: #000; */
+  /* background-image: linear-gradient(130deg,#000608 33%,#082b3f 67%); */
+  /* background-repeat: no-repeat; */
+  /* max-width: 500px; */
+  height: 100%;
+  margin: 0;
+  /* padding-top: 22px; */
   -webkit-font-smoothing: antialiased;
   font-size: 15px;
   color: #f3f3f3;
-  line-height: 1.5em;
+  /* line-height: 1.5em; */
 }
 
-h1, h2, h3 {
-  color: #f3f3f3;
-}
-h1 {
-  font-size: 2.5em
+#app {
+    height: 100%;
 }
 
 h2 {
-  font-size: 2em
+    font-size: 2em;
+    margin: 0;
+    padding-top: 17px;
 }
 
-h3 {
-  font-size: 1.5em
+#main-wrapper {
+    position: relative;
+    background: #000;
+    background-repeat: no-repeat;
+    height: 100%;
 }
 
-a {
-  text-decoration: none;
-  color: #09f;
-}
-
-a:hover {
-  text-decoration: underline;
+.wrapper {
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 .wrapper .flex {
@@ -75,7 +73,7 @@ button.date-btn {
 #progress-circle span {
     position: absolute;
     font-size: 11px;
-    top: 3.5px;
+    top: 7px;
     left: 5px;
 }
 
@@ -90,7 +88,7 @@ p {
     position: absolute;
     overflow: hidden;
     right: 5px;
-    top: 0px;
+    top: 25px;
 }
 .time-lapse p {
     text-align: center;

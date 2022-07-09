@@ -84,12 +84,16 @@
                             86400 2592000
                             2592000 1))}
     (lapse-map (:lapse @store))] " /sec"])
-
 (defn main []
   #_(fn [])
-  [:div {:style {:position "relative"}}
-   [:h2 {:style {:padding-left "20px"}} "Panjika"]
-
+  [:div#main-wrapper
+   {:style {:background-image (let
+                                  [fct (-> (:date-now @store)
+                                           astronomy/MoonPhase (/ 12) 
+                                           Math/ceil (- 15) Math/abs (/ 15))]
+                                (str "linear-gradient(130deg,#000608 " (* fct 100) "%,#0b2f4f"))}}
+   [:h2 {:style {:padding-right "128px" :text-align "center"}} "Panjika"]
+   
    [time-lapse]
 
    [set-time]
