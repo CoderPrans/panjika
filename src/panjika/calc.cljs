@@ -200,6 +200,28 @@
 
 ;; Sun altitude -42deg at midnight ? should be -90
 
+(+ 5.5 (astronomy/SiderealTime (js/Date.)))
+;; => 18.865479635990095
+
+;; https://astronomy.stackexchange.com/questions/36227/how-to-tell-which-of-the-ecliptic-cross-horizon-angles-is-to-the-east
+;; ecliptic cross horizon angles?
+;; tanL = -cosT/(sinEtanP+cosEsinT)
+;; where, L is (cross horizon longitudes)
+;; T Local Sidereal Time
+;; E Obliquity of the ecliptic 23.4
+;; P Latitude of Observer
+
+(#(let [pi Math/PI
+        t (+ 5.5 (astronomy/SiderealTime %))
+        e 23.4
+        p 23.17]
+    (Math/atan
+     (/ (* -1 (Math/cos t))
+        (+ (* (Math/sin e) (Math/tan p))
+           (* (Math/cos e) (Math/sin t))))))
+ (js/Date.))
+;; => 0.3690437363241621
+
 
 (comment
   (.-elon (astronomy/SunPosition (js/Date.)));; => 65.60813882173356
