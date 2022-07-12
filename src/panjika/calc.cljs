@@ -67,7 +67,7 @@
 ;;           (recur pl (+ (* 1000 60) inst)))
 ;;         (js/Date. inst)))))
 
-(def ayanmasa 24) ; the angle b/w tropical & sidereal 0deg
+(def ayanaamsa 24) ; the angle b/w tropical & sidereal 0deg
 
                                         ; Nakshatra
 
@@ -75,7 +75,7 @@
 
 (defn get-nakshatra [body dt]
   (let [to-asvini (- (:lon (eclipticCoor body dt))
-                     ayanmasa)
+                     ayanaamsa)
         index (/ to-asvini (/ 360 27))]
     (vector
      (const/nakshatras (if (> index 0) index (+ 27 index)))
@@ -89,7 +89,7 @@
 
 (defn get-rashi [body dt]
   (let [to-mesha (- (:lon (eclipticCoor body dt))
-                     ayanmasa)
+                    ayanaamsa)
         index (/ to-mesha 30)]
     (vector
      (const/rashis (if (> index 0) index (+ 12 index)))
@@ -131,7 +131,7 @@
 ;;                          (let [tl (get-diff (js/Date. inst))]
 ;;                            (recur tl (+ (* 1000 60 60 6) inst)))
 ;;                          (js/Date. inst)))
-        
+
 ;;         naks-index (.indexOf
 ;;                     const/nakshatras
 ;;                     (-> (get-nakshatra next-purnima)
@@ -166,13 +166,13 @@
                                         ; EquatorialCoordinate chart
 
 #_(defn get-constellation [bodies]
-  "Takes a sequence of bodies, returns their constellations in a map"
-  (apply merge
-         (map #(let [eq (fn [d] (equatorCoord d (js/Date.)))
-                     ra (.-ra (eq %))
-                     dec (.-dec (eq %))]
-                 (hash-map (keyword %) (.-name (astronomy/Constellation ra dec))))
-              bodies)))
+    "Takes a sequence of bodies, returns their constellations in a map"
+    (apply merge
+           (map #(let [eq (fn [d] (equatorCoord d (js/Date.)))
+                       ra (.-ra (eq %))
+                       dec (.-dec (eq %))]
+                   (hash-map (keyword %) (.-name (astronomy/Constellation ra dec))))
+                bodies)))
 
 #_(get-constellation ["Sun" "Moon"])
 ;; => {:Sun "Taurus", :Moon "Pisces"}
@@ -184,43 +184,15 @@
 ;; => {:Sun {:ra 4.225829012729178, :dec 21.182852562375412}, :Moon {:ra 1.6658110006483537, :dec 7.086044700301664}}
 
 
-(#(let [observer (new astronomy/Observer 23.17 75.78 0)
-        {:keys [ra dec]} (js-parse (astronomy/Equator "Sun" % observer true false))
-        sun-alt ((js-parse (astronomy/Horizon % observer ra dec false)) :altitude)
-        from-east (if (>= (.getHours %) 12)
-                    (+ 90 (- 90 sun-alt))
-                    (if (>= sun-alt 0) sun-alt (+ 360 sun-alt)))
-        rashi (.indexOf const/rashis (first (get-rashi "Sun" %)))
-        passed (* 30 (last (get-rashi "Sun" %)))]
-    [(inc rashi) (- from-east passed) sun-alt])
-  (js/Date.))
-;; => [3 210.975843150844 -42.76093408231793]
-(.toString (js/Date.))
-;; => "Mon Jun 27 2022 23:54:45 GMT+0530 (India Standard Time)"
 
-;; Sun altitude -42deg at midnight ? should be -90
-
-(+ 5.5 (astronomy/SiderealTime (js/Date.)))
-;; => 18.865479635990095
-
-;; https://astronomy.stackexchange.com/questions/36227/how-to-tell-which-of-the-ecliptic-cross-horizon-angles-is-to-the-east
-;; ecliptic cross horizon angles?
-;; tanL = -cosT/(sinEtanP+cosEsinT)
-;; where, L is (cross horizon longitudes)
-;; T Local Sidereal Time
-;; E Obliquity of the ecliptic 23.4
-;; P Latitude of Observer
-
-(#(let [pi Math/PI
-        t (+ 5.5 (astronomy/SiderealTime %))
-        e 23.4
-        p 23.17]
-    (Math/atan
-     (/ (* -1 (Math/cos t))
-        (+ (* (Math/sin e) (Math/tan p))
-           (* (Math/cos e) (Math/sin t))))))
+(#(let [observer (new astronomy/Observer 23.17 75.78 0) 
+        index (/ (- (.-elon (astronomy/Ecliptic (astronomy/ObserverVector % observer true)))
+                    ayanaamsa) 30)]
+    (const/rashis (if (> index 0) index (+ 12 index)))
+    )
  (js/Date.))
-;; => 0.3690437363241621
+;; => "Makara (♑︎ Cap.)"
+
 
 
 (comment
@@ -249,5 +221,44 @@
   (js-parse (astronomy/Equator "Sun" (js/Date.) (new astronomy/Observer 0 0 0) false false))
   ;; => {:vec #object[Vector [object Object]], :ra 6.075686172510978, :dist 1.0163391999787272, :dec 23.432006601419097}
 
-)
+  (+ 5.5 (astronomy/SiderealTime (js/Date.)))
+  ;; => 18.865479635990095
+
+  ;; https://astronomy.stackexchange.com/questions/36227/how-to-tell-which-of-the-ecliptic-cross-horizon-angles-is-to-the-east
+  ;; ecliptic cross horizon angles?
+  ;; tanL = -cosT/(sinEtanP+cosEsinT)
+  ;; where, L is (cross horizon longitudes)
+  ;; T Local Sidereal Time
+  ;; E Obliquity of the ecliptic 23.4
+  ;; P Latitude of Observer
+
+  (#(let [pi Math/PI
+          t (+ 5.5 (astronomy/SiderealTime %))
+          e (* (/ Math/PI 180) 23.4)
+          p (* (/ Math/PI 180) 23.17)]
+      (Math/atan
+       (/ (* -1 (Math/cos t))
+          (+ (* (Math/sin e) (Math/tan p))
+             (* (Math/cos e) (Math/sin t))))))
+   (new js/Date 2005 7 16 12 06))
+  ;; => 0.3690437363241621
+
+
+  (#(let [observer (new astronomy/Observer 23.17 75.78 0)
+          {:keys [ra dec]} (js-parse (astronomy/Equator "Sun" % observer true false))
+          sun-alt ((js-parse (astronomy/Horizon % observer ra dec false)) :altitude)
+          from-east (if (>= (.getHours %) 12)
+                      (+ 90 (- 90 sun-alt))
+                      (if (>= sun-alt 0) sun-alt (+ 360 sun-alt)))
+          rashi (.indexOf const/rashis (first (get-rashi "Sun" %)))
+          passed (* 30 (last (get-rashi "Sun" %)))]
+      [(inc rashi) (- from-east passed) sun-alt])
+   (js/Date.))
+  ;; => [3 210.975843150844 -42.76093408231793]
+  (.toString (js/Date.))
+  ;; => "Mon Jun 27 2022 23:54:45 GMT+0530 (India Standard Time)"
+  ;; Sun altitude -42deg at midnight ? should be -90
+
+
+  )
 ;; => nil
