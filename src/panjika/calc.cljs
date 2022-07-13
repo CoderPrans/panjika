@@ -193,6 +193,10 @@
  (js/Date.))
 ;; => "Makara (♑︎ Cap.)"
 
+(let [{t :time k :kind} (js-parse (astronomy/SearchMoonNode (js/Date.)))]
+  [(if (= 1 k) "Rahu" "Ketu")
+   (get-rashi "Moon" ((js-parse t) :date))])
+;; => ["Rahu" ["Mesha (♈︎ Ari.)" 0.8577286629232517]]
 
 
 (comment
