@@ -156,47 +156,120 @@
 (for-dt (new js/Date 2005 7 16 11 26))
 ;; => {:moon
 ;;     {:naks ["Mula" 0.7497288071350958],
-;;      :rashi ["Dhanu (♐︎ Sag.)" 0.3332128031711541]},
+;;      :rashi ["Dhanu (Sag.)" 0.3332128031711541]},
 ;;     :sun
 ;;     {:naks ["Aslesha" 0.9550769774396777],
-;;      :rashi ["Karka (♋︎ Can.)" 0.9800342121954126]},
+;;      :rashi ["Karka (Can.)" 0.9800342121954126]},
 ;;     :tithi ["Shukl Ekadashi" 0.8829464774393525],
 ;;     :masa "Shraavana"}
 
-                                        ; EquatorialCoordinate chart
+(lagna-chart (new js/Date 2005 7 16 11 26))
+;; => (("Tula (Lib.)" [])
+;;     ("Vrischika (Sco.)" [])
+;;     ("Dhanu (Sag.)" ("Moon"))
+;;     ("Makara (Cap.)" [])
+;;     ("Kumbha (Aqu.)" [])
+;;     ("Meen (Pic.)" ("Rahu"))
+;;     ("Mesha (Ari.)" ("Mars"))
+;;     ("Vrishabha (Tau.)" [])
+;;     ("Mithuna (Gem.)" [])
+;;     ("Karka (Can.)" ("Sun" "Mercury" "Saturn"))
+;;     ("Simha (Leo)" [])
+;;     ("Kanya (Vir.)" ("Ketu" "Venus" "Jupiter")))
 
-#_(defn get-constellation [bodies]
-    "Takes a sequence of bodies, returns their constellations in a map"
-    (apply merge
-           (map #(let [eq (fn [d] (equatorCoord d (js/Date.)))
-                       ra (.-ra (eq %))
-                       dec (.-dec (eq %))]
-                   (hash-map (keyword %) (.-name (astronomy/Constellation ra dec))))
-                bodies)))
-
-#_(get-constellation ["Sun" "Moon"])
-;; => {:Sun "Taurus", :Moon "Pisces"}
-
-;; (apply merge
-;;        (map #(let [eq (fn [d] (equatorCoord d (js/Date.)))]
-;;                (hash-map (keyword %) {:ra (.-ra (eq %)) :dec (.-dec (eq % ))}))
-;;             ["Moon" "Sun"]))
-;; => {:Sun {:ra 4.225829012729178, :dec 21.182852562375412}, :Moon {:ra 1.6658110006483537, :dec 7.086044700301664}}
+(lagna-chart (new js/Date 1999 2 2 17 15))
+;; => (("Simha (Leo)" ("Moon"))
+;;     ("Kanya (Vir.)" [])
+;;     ("Tula (Lib.)" ("Mars"))
+;;     ("Vrischika (Sco.)" [])
+;;     ("Dhanu (Sag.)" [])
+;;     ("Makara (Cap.)" ("Ketu"))
+;;     ("Kumbha (Aqu.)" ("Sun"))
+;;     ("Meen (Pic.)" ("Mercury" "Venus" "Jupiter"))
+;;     ("Mesha (Ari.)" ("Saturn"))
+;;     ("Vrishabha (Tau.)" [])
+;;     ("Mithuna (Gem.)" [])
+;;     ("Karka (Can.)" ("Rahu")))
 
 
+                                        ; Lagna Chart
 
-(#(let [observer (new astronomy/Observer 23.17 75.78 0) 
-        index (/ (- (.-elon (astronomy/Ecliptic (astronomy/ObserverVector % observer true)))
+
+(defn rot-idx [count idx]
+  (if (>= idx count) (mod idx count) idx))
+
+(defn rashi-to-x [rashi x]
+  (const/rashis
+   (rot-idx 12 (+ (.indexOf const/rashis rashi) x))))
+
+(defn get-lagna [dt]
+  (let [observer (new astronomy/Observer 23.17 75.78 0)
+        index (/ (- (.-elon (astronomy/Ecliptic
+                             (astronomy/ObserverVector dt observer true)))
                     ayanaamsa) 30)]
-    (const/rashis (if (> index 0) index (+ 12 index)))
-    )
- (js/Date.))
-;; => "Makara (♑︎ Cap.)"
+    (rashi-to-x (const/rashis (if (> index 0) index (+ 12 index))) 3)
+    ))
 
-(let [{t :time k :kind} (js-parse (astronomy/SearchMoonNode (js/Date.)))]
-  [(if (= 1 k) "Rahu" "Ketu")
-   (get-rashi "Moon" ((js-parse t) :date))])
-;; => ["Rahu" ["Mesha (♈︎ Ari.)" 0.8577286629232517]]
+(get-lagna (js/Date.))
+;; => "Makara (Cap.)"
+
+(defn get-rahu-ketu [dt]
+  (let [{t :time k :kind} (js-parse (astronomy/SearchMoonNode dt))
+        node (first (get-rashi "Moon" ((js-parse t) :date)))
+        rk (if (= k 1) ["Rahu" "Ketu"] ["Ketu" "Rahu"])]
+    (apply hash-map
+           [node (rk 0) (rashi-to-x node 6) (rk 1)])))
+
+(get-rahu-ketu (js/Date.))
+;; => {"Mesha (Ari.)" "Rahu", "Tula (Lib.)" "Ketu"}
+
+(def grahas ["Moon" "Sun" "Mercury" "Venus" "Mars" "Jupiter" "Saturn"])
+
+(defn dasha [dt]
+  (->> (reduce
+        #(let [rs (first (get-rashi %2 dt))]
+           (assoc %1 rs 
+                  (if (%1 rs) (conj (%1 rs) %2 ) (vector %2))))
+        {} grahas)
+       (merge-with #(flatten (conj %1 %2)) (zipmap const/rashis (repeat [])))
+       (merge-with cons (get-rahu-ketu dt))))
+
+(dasha (js/Date.))
+;; => {"Mithuna (Gem.)" ("Venus"),
+;;     "Vrischika (Sco.)" [],
+;;     "Dhanu (Sag.)" [],
+;;     "Kanya (Vir.)" [],
+;;     "Kumbha (Aqu.)" [],
+;;     "Vrishabha (Tau.)" ("Moon"),
+;;     "Simha (Leo)" [],
+;;     "Makara (Cap.)" ("Saturn"),
+;;     "Karka (Can.)" ("Sun" "Mercury"),
+;;     "Meen (Pic.)" ("Jupiter"),
+;;     "Mesha (Ari.)" ("Rahu" "Mars"),
+;;     "Tula (Lib.)" ("Ketu")}
+
+
+(defn lagna-chart [dt]
+  (map #(let [rs (const/rashis
+                  (rot-idx
+                   (count const/rashis)
+                   (+ % (.indexOf const/rashis
+                                  (get-lagna dt)))))]
+          (list rs ((dasha dt) rs))) (range 12)))
+
+(lagna-chart (js/Date.))
+;; => (("Kumbha (Aqu.)" [])
+;;     ("Meen (Pic.)" ("Jupiter"))
+;;     ("Mesha (Ari.)" ("Rahu" "Mars"))
+;;     ("Vrishabha (Tau.)" ("Moon"))
+;;     ("Mithuna (Gem.)" ("Venus"))
+;;     ("Karka (Can.)" ("Sun" "Mercury"))
+;;     ("Simha (Leo)" [])
+;;     ("Kanya (Vir.)" [])
+;;     ("Tula (Lib.)" ("Ketu"))
+;;     ("Vrischika (Sco.)" [])
+;;     ("Dhanu (Sag.)" [])
+;;     ("Makara (Cap.)" ("Saturn")))
 
 
 (comment

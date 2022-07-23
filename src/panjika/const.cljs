@@ -9,7 +9,7 @@
 
 (def nakshatras ["Ashwini", "Bharini", "Krittika", "Rohini", "Mrigashirasa", "Ardra", "Punarvasu", "Pushya", "Aslesha", "Magha", "P.Phalguni", "U.Phalguni", "Hastra", "Chitra", "Svati", "Visakha", "Anuradha", "Jyestha", "Mula", "P.Asadha", "U.Asadha", "Sravana", "Dhanistha", "Satabhisha", "P.Bhadrapada", "U.Bhadrapada", "Revati"])
 
-(def rashis ["Mesha (♈︎ Ari.)", "Vrishabha (♉︎ Tau.)", "Mithuna (♊︎ Gem.)", "Karka (♋︎ Can.)", "Simha (♌︎ Leo)", "Kanya (♍︎ Vir.)", "Tula (♎︎ Lib.)", "Vrischika (♏︎ Sco.)", "Dhanu (♐︎ Sag.)", "Makara (♑︎ Cap.)", "Kumbha (♒︎ Aqu.)", "Meen (♓︎︎ Pic.)"])
+(def rashis ["Mesha (Ari.)", "Vrishabha (Tau.)", "Mithuna (Gem.)", "Karka (Can.)", "Simha (Leo)", "Kanya (Vir.)", "Tula (Lib.)", "Vrischika (Sco.)", "Dhanu (Sag.)", "Makara (Cap.)", "Kumbha (Aqu.)", "Meen (Pic.)"])
 
 (def nks_mas {"Chitra" "Chaitra"
               "Visakha" "Vaisaakha"
