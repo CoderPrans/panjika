@@ -163,33 +163,6 @@
 ;;     :tithi ["Shukl Ekadashi" 0.8829464774393525],
 ;;     :masa "Shraavana"}
 
-(lagna-chart (new js/Date 2005 7 16 11 26))
-;; => (("Tula (Lib.)" [])
-;;     ("Vrischika (Sco.)" [])
-;;     ("Dhanu (Sag.)" ("Moon"))
-;;     ("Makara (Cap.)" [])
-;;     ("Kumbha (Aqu.)" [])
-;;     ("Meen (Pic.)" ("Rahu"))
-;;     ("Mesha (Ari.)" ("Mars"))
-;;     ("Vrishabha (Tau.)" [])
-;;     ("Mithuna (Gem.)" [])
-;;     ("Karka (Can.)" ("Sun" "Mercury" "Saturn"))
-;;     ("Simha (Leo)" [])
-;;     ("Kanya (Vir.)" ("Ketu" "Venus" "Jupiter")))
-
-(lagna-chart (new js/Date 1999 2 2 17 15))
-;; => (("Simha (Leo)" ("Moon"))
-;;     ("Kanya (Vir.)" [])
-;;     ("Tula (Lib.)" ("Mars"))
-;;     ("Vrischika (Sco.)" [])
-;;     ("Dhanu (Sag.)" [])
-;;     ("Makara (Cap.)" ("Ketu"))
-;;     ("Kumbha (Aqu.)" ("Sun"))
-;;     ("Meen (Pic.)" ("Mercury" "Venus" "Jupiter"))
-;;     ("Mesha (Ari.)" ("Saturn"))
-;;     ("Vrishabha (Tau.)" [])
-;;     ("Mithuna (Gem.)" [])
-;;     ("Karka (Can.)" ("Rahu")))
 
 
                                         ; Lagna Chart
@@ -255,22 +228,24 @@
                    (count const/rashis)
                    (+ % (.indexOf const/rashis
                                   (get-lagna dt)))))]
-          (list rs ((dasha dt) rs))) (range 12)))
+          (list (inc (.indexOf const/rashis rs)) ((dasha dt) rs))) (range 12)))
 
 (lagna-chart (js/Date.))
-;; => (("Kumbha (Aqu.)" [])
-;;     ("Meen (Pic.)" ("Jupiter"))
-;;     ("Mesha (Ari.)" ("Rahu" "Mars"))
-;;     ("Vrishabha (Tau.)" ("Moon"))
-;;     ("Mithuna (Gem.)" ("Venus"))
-;;     ("Karka (Can.)" ("Sun" "Mercury"))
-;;     ("Simha (Leo)" [])
-;;     ("Kanya (Vir.)" [])
-;;     ("Tula (Lib.)" ("Ketu"))
-;;     ("Vrischika (Sco.)" [])
-;;     ("Dhanu (Sag.)" [])
-;;     ("Makara (Cap.)" ("Saturn")))
+;; => ((2 [])
+;;     (3 ("Venus"))
+;;     (4 ("Moon" "Sun" "Mercury"))
+;;     (5 [])
+;;     (6 [])
+;;     (7 ("Ketu"))
+;;     (8 [])
+;;     (9 [])
+;;     (10 ("Saturn"))
+;;     (11 [])
+;;     (12 ("Jupiter"))
+;;     (1 ("Rahu" "Mars")))
 
+;; (lagna-chart (new js/Date 2005 7 16 11 26))
+;; (lagna-chart (new js/Date 1999 2 2 17 15))
 
 (comment
   (.-elon (astronomy/SunPosition (js/Date.)));; => 65.60813882173356

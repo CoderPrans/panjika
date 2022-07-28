@@ -4,7 +4,8 @@
       [reagent.dom :as d]
       ["astronomy-engine" :as astronomy]
       [panjika.calc :as calc]
-      [panjika.chart :as chart]))
+      [panjika.chart :as chart]
+      [panjika.const :as const]))
 
 ;; -------------------------
 ;; Views
@@ -14,7 +15,8 @@
   (let [date-now (js/Date.)]
     (r/atom {:date-now date-now
              :lapse 1
-             :panjika (calc/for-dt date-now)})))
+             :panjika (calc/for-dt date-now)
+             :chakra false})))
 
 
 (defn set-time []
@@ -99,6 +101,29 @@
    [set-time]
 
    [chart/chart-component (:date-now @store)]
+
+   [:span.chakra {:on-click #(swap! store assoc :chakra
+                                    (not (@store :chakra)))}
+    "☸"]
+
+   [:div.chakra-grid
+    {:style {:opacity (when-not (@store :chakra) 0)}}
+    (let [lagna (into [] (calc/lagna-chart (@store :date-now)))]
+      (for [i (range 25)]
+        (let [pada (get lagna (.indexOf const/house_box
+                                        (some #(when (= % i) i) const/house_box)))]
+          [:div
+           {:style {:position "relative"}
+            :class (str "chakra-box " (when (#{1 2 3 5 9 10 14
+                                               15 19 21 22 23} i)
+                                        "bhava"))
+            :key i}
+           [:span {:style {:position "absolute" :bottom 0 :right 0 :font-size "12px"}}
+            (first pada)]
+           (clojure.string/join
+            " " (map #(subs % 0 2)
+                     (last pada)))])))]
+
 
    [:div.wrapper
     [:div {:style {:margin-bottom "8px"}}

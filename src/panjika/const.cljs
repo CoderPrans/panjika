@@ -23,3 +23,6 @@
               "Pushya" "Pausha"
               "Magha" "Maagha"
               "P.Phalguni" "Phaalguna"})
+
+;; specific to this apps' lagna representation.
+(def house_box [2 1 5 10 15 21 22 23 19 14 9 3])
