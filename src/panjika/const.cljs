@@ -1,9 +1,9 @@
 (ns panjika.const)
 
 (def tithis [
-             "Shukl Pratipada (Br 1)", "Shukl Dwitiya (Br 2)", "Shukl Tritiya (Br 3)", "Shukl Chaturthi (Br 4)", "Shukl Panchami (Br 5)", "Shukl Shashthi (Br 6)", "Shukl Saptami (Br 7)", "Shukl Ashtami (Br 8)", "Shukl Navami (Br 9)", "Shukl Dashami (Br 10)", "Shukl Ekadashi (Br 11)", "Shukl Dwadashi (Br 12)", "Shukl Trayodashi (Br 13)", "Shukl Chaturdashi (Br 14)",
+             "Shukl Prti. (Br 1)", "Shukl Dwit. (Br 2)", "Shukl Trit. (Br 3)", "Shukl Catu. (Br 4)", "Shukl Panch. (Br 5)", "Shukl Sast. (Br 6)", "Shukl Sapt. (Br 7)", "Shukl Asht. (Br 8)", "Shukl Nava. (Br 9)", "Shukl Dasm. (Br 10)", "Shukl Ekad. (Br 11)", "Shukl Dwad. (Br 12)", "Shukl Tryod. (Br 13)", "Shukl Caturd. (Br 14)",
              "Purnima (Full Moon)",
-             "Krshn Pratipada (Da 1)", "Krshn Dwitiya (Da 2)", "Krshn Tritiya (Da 3)", "Krshn Chaturthi (Da 4)", "Krshn Panchami (Da 5)", "Krshn Shashthi (Da 6)", "Krshn Saptami (Da 7)", "Krshn Ashtami (Da 8)", "Krshn Navami (Da 9)", "Krshn Dashmi (Da 10)", "Krshn Ekadashi (Da 11)", "Krshn Dwadashi (Da 12)", "Krshn Trayodashi (Da 13)", "Krshn Chaturdashi (Da 14)",
+             "Krshn Prti. (Da 1)", "Krshn Dwit. (Da 2)", "Krshn Trit. (Da 3)", "Krshn Catu. (Da 4)", "Krshn Panch. (Da 5)", "Krshn Sast. (Da 6)", "Krshn Sapt. (Da 7)", "Krshn Asht. (Da 8)", "Krshn Nava. (Da 9)", "Krshn Dasm. (Da 10)", "Krshn Ekad. (Da 11)", "Krshn Dwad. (Da 12)", "Krshn Tryod. (Da 13)", "Krshn Caturd. (Da 14)",
              "Amavasya (New Moon)"
              ])
 
