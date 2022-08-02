@@ -130,9 +130,9 @@
      (segment-view "Maasa: " :masa)]
     (segment-view "Tithi: " :tithi)
     [:p {:style {:padding-left "18px"}} ".........."]
-    (segment-view "Chandra: " :moon)
+    (segment-view "Moon: " :moon)
     [:p {:style {:padding-left "18px"}} ".........."]
-    (segment-view "Surya: " :sun)
+    (segment-view "Sun: " :sun)
     ]])
 
 

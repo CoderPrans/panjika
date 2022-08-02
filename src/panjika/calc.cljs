@@ -11,6 +11,9 @@
          flatten (apply hash-map)
          clojure.walk/keywordize-keys)))
 
+(defn rot-idx [count idx]
+  (if (>= idx count) (mod idx count) idx))
+
 (defn eclipticCoor [body date]
   (let [ec (-> body
                (astronomy/GeoVector date false)
@@ -105,18 +108,28 @@
 
 (defn get-masa [dt]
   (let [nks #(first (get-nakshatra "Moon" %))
-        purnima-time #(:date (js-parse (astronomy/SearchMoonPhase % dt 30)))
-        next-purnima-entry (purnima-time 180)
-        next-purnima-exit (purnima-time 192)
-        entry-nks (nks next-purnima-entry)
-        exit-nks (nks next-purnima-exit)]
-    #_{next-purnima-entry entry-nks
-       next-purnima-exit exit-nks}
-    (or (const/nks_mas entry-nks)
-        (const/nks_mas (const/nakshatras (dec (.indexOf const/nakshatras entry-nks)))))))
+        moon-time #(:date (js-parse (astronomy/SearchMoonPhase % dt 30)))
+        next-purnima (moon-time 180)
+        ;; next-amavasya (moon-time 359)
+        sun-rasi (first (get-rashi "Sun" next-purnima))]
+    (or 
+     (const/nks_mas (nks next-purnima))
+     (const/nks_mas (const/nakshatras (rot-idx 27 (inc (.indexOf const/nakshatras (nks next-purnima))))))
+     (const/nks_mas (const/nakshatras (rot-idx 27 (dec (.indexOf const/nakshatras (nks next-purnima))))))
+     (const/masa (rot-idx 12 (.indexOf const/rashis sun-rasi)))
+     )
+    ))
 
-(get-masa (js/Date. 2022 5 19))
-;; => "Asadha"
+(get-masa (js/Date.))
+(get-masa (js/Date. 2022 9 12 13 22))
+(get-masa (js/Date. 1999 2 2 17 22))
+(get-masa (js/Date. 1996 4 26 14 22))
+(get-masa (js/Date. 2005 7 16 11 26))
+
+
+(first (get-rashi "Sun" (js/Date.)))
+(const/masa (.indexOf const/rashis (first (get-rashi "Sun" (:date (js-parse (astronomy/SearchMoonPhase 359 (js/Date.) 30)))))))
+
 ;; => {#inst "2022-07-13T18:38:04.131-00:00" "U.Asadha (0.02871)", #inst "2022-07-14T14:47:14.637-00:00" "U.Asadha (0.98874)"}
 ;; (keys const/nks_mas)
 ;; (get-nakshatra (:date (js-parse (astronomy/SearchMoonPhase 180 (new js/Date 2022 9 15) 30))))
@@ -167,9 +180,6 @@
 
                                         ; Lagna Chart
 
-
-(defn rot-idx [count idx]
-  (if (>= idx count) (mod idx count) idx))
 
 (defn rashi-to-x [rashi x]
   (const/rashis
