@@ -1,9 +1,9 @@
 (ns panjika.const)
 
 (def tithis [
-             "Shukl Pratipada (Bright 1)", "Shukl Dwitiya (Bright 2)", "Shukl Tritiya (Bright 3)", "Shukl Chaturthi (Bright 4)", "Shukl Panchami (Bright 5)", "Shukl Shashthi (Bright 6)", "Shukl Saptami (Bright 7)", "Shukl Ashtami (Bright 8)", "Shukl Navami (Bright 9)", "Shukl Dashami (Bright 10)", "Shukl Ekadashi (Bright 11)", "Shukl Dwadashi (Bright 12)", "Shukl Trayodashi (Bright 13)", "Shukl Chaturdashi (Bright 14)",
+             "Shukl Pratipada (Br 1)", "Shukl Dwitiya (Br 2)", "Shukl Tritiya (Br 3)", "Shukl Chaturthi (Br 4)", "Shukl Panchami (Br 5)", "Shukl Shashthi (Br 6)", "Shukl Saptami (Br 7)", "Shukl Ashtami (Br 8)", "Shukl Navami (Br 9)", "Shukl Dashami (Br 10)", "Shukl Ekadashi (Br 11)", "Shukl Dwadashi (Br 12)", "Shukl Trayodashi (Br 13)", "Shukl Chaturdashi (Br 14)",
              "Purnima (Full Moon)",
-             "Krshn Pratipada (Dark 1)", "Krshn Dwitiya (Dark 2)", "Krshn Tritiya (Dark 3)", "Krshn Chaturthi (Dark 4)", "Krshn Panchami (Dark 5)", "Krshn Shashthi (Dark 6)", "Krshn Saptami (Dark 7)", "Krshn Ashtami (Dark 8)", "Krshn Navami (Dark 9)", "Krshn Dashmi (Dark 10)", "Krshn Ekadashi (Dark 11)", "Krshn Dwadashi (Dark 12)", "Krshn Trayodashi (Dark 13)", "Krshn Chaturdashi (Dark 14)",
+             "Krshn Pratipada (Da 1)", "Krshn Dwitiya (Da 2)", "Krshn Tritiya (Da 3)", "Krshn Chaturthi (Da 4)", "Krshn Panchami (Da 5)", "Krshn Shashthi (Da 6)", "Krshn Saptami (Da 7)", "Krshn Ashtami (Da 8)", "Krshn Navami (Da 9)", "Krshn Dashmi (Da 10)", "Krshn Ekadashi (Da 11)", "Krshn Dwadashi (Da 12)", "Krshn Trayodashi (Da 13)", "Krshn Chaturdashi (Da 14)",
              "Amavasya (New Moon)"
              ])
 
