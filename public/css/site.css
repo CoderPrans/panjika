@@ -15,10 +15,6 @@ html, body {
   /* line-height: 1.5em; */
 }
 
-#app {
-    height: 100%;
-}
-
 h2 {
     font-size: 2em;
     margin: 0;

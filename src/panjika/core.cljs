@@ -59,8 +59,8 @@
    [:p (cond
          (= strg "Maasa: ") [:span {:style {:margin-right "42px"}}
                              (keyw (:panjika @store))]
-         ;; (= strg "Vaara: ") [:span {:style {:margin-right "42px"}}
-                             ;; (keyw (:panjika @store))]
+         (= strg "Vaara: ") [:span {:style {:margin-right "42px"}}
+                             (keyw (:panjika @store))]
          (= strg "Tithi: ") (position (keyw (:panjika @store)))
          (= strg "Yoga: ") (position (keyw (:panjika @store)))
          (= strg "Karana: ") (position (keyw (:panjika @store)))
@@ -132,7 +132,7 @@
    [:div.wrapper
     [:div {:style {:margin-bottom "8px"}}
      (segment-view "Maasa: " :masa)
-     ;; (segment-view "Vaara: " :vaara)
+     (segment-view "Vaara: " :vaara)
      ]
     (segment-view "Tithi: " :tithi)
     [:p {:style {:padding-left "18px"}} ".........."]
