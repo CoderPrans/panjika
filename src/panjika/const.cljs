@@ -7,7 +7,7 @@
              "Amavasya (New Moon)"
              ])
 
-(def nakshatras ["Ashwini", "Bharini", "Krittika", "Rohini", "Mrigashirasa", "Ardra", "Punarvasu", "Pushya", "Aslesha", "Magha", "P.Phalguni", "U.Phalguni", "Hastra", "Chitra", "Svati", "Visakha", "Anuradha", "Jyestha", "Mula", "P.Asadha", "U.Asadha", "Sravana", "Dhanistha", "Satabhisha", "P.Bhadrapada", "U.Bhadrapada", "Revati"])
+(def nakshatras ["Ashwini", "Bharini", "Krittika", "Rohini", "Mrigashirasa", "Ardra", "Punarvasu", "Pushya", "Aslesha", "Magha", "P.Phalguni", "U.Phalguni", "Hastra", "Chitra", "Svati", "Visakha", "Anuradha", "Jyestha", "Moola", "P.Asadha", "U.Asadha", "Sravana", "Dhanistha", "Satabhisha", "P.Bhadrapada", "U.Bhadrapada", "Revati"])
 
 (def rashis ["Mesha (Ari.)", "Vrishabha (Tau.)", "Mithuna (Gem.)", "Karka (Can.)", "Simha (Leo)", "Kanya (Vir.)", "Tula (Lib.)", "Vrischika (Sco.)", "Dhanu (Sag.)", "Makara (Cap.)", "Kumbha (Aqu.)", "Meen (Pic.)"])
 
@@ -39,3 +39,53 @@
 
 ;; specific to this apps' lagna representation.
 (def house_box [2 1 5 10 15 21 22 23 19 14 9 3])
+
+(def yoga ["Vishkumbha"
+           "Priti"
+           "Ayushman"
+           "Saubhagya"
+           "Shobhana"
+           "Atiganda"
+           "Sukarma"
+           "Dhriti"
+           "Shoola"
+           "Ganda"
+           "Vriddhi"
+           "Dhruva"
+           "Vyaghata"
+           "Harshana"
+           "Vajra"
+           "Siddhi"
+           "Vyatipata"
+           "Variyana"
+           "Parigha"
+           "Shiva"
+           "Siddha"
+           "Sadhya"
+           "Shubha"
+           "Shukla"
+           "Brahma"
+           "Indra"
+           "Vaidhriti"])
+
+(def karana ["Bava"
+             "Balava"
+             "Kaulava"
+             "Taitila"
+             "Gara"
+             "Vanija"
+             "Vishti"
+             "Shakuni"
+             "Chatushpada"
+             "Naga"
+             "Kinstughna"])
+
+(def karana-to-tithi
+  (vec (map #(let [[x y] %] (vector (karana x) (karana y)))
+               [[10 0] [1 2] [3 4] [5 6] [0 1]
+                [2 3] [4 5] [6 0] [1 2] [3 4]
+                [5 6] [0 1] [2 3] [4 5] [6 0]
+                [1 2] [3 4] [5 6] [0 1] [2 3]
+                [4 5] [6 0] [1 2] [3 4] [5 6]
+                [0 1] [2 3] [4 5] [6 7] [8 9]])))
+

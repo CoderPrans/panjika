@@ -81,7 +81,7 @@
                      ayanaamsa)
         index (/ to-asvini (/ 360 27))]
     (vector
-     (const/nakshatras (if (> index 0) index (+ 27 index)))
+     (const/nakshatras (mod index 27))
      (mod index 1))))
 
 (get-nakshatra "Moon" (js/Date.))
@@ -100,6 +100,44 @@
 
 (get-rashi "Sun" (js/Date.))
 ;; => ["Mithuna (♊︎ Gem.)" 0.32826329039507796]
+
+                                        ; Vara
+(defn get-vaara [dt]
+  (let [varas ["Ravi" "Soma" "Mangala" "Budha" "Guru" "Shukra" "Shani"]]
+    (get varas (.getDay dt)))
+  )
+
+(get-vaara (js/Date. 2022 7 9))
+;; => "Mangala"
+
+
+                                        ; Yoga
+(defn get-yoga [dt]
+  (let [bhoga #(- (:lon (eclipticCoor % dt)) ayanaamsa)
+        sun (bhoga "Sun")
+        moon (bhoga "Moon")
+        idx (/ (+ sun moon) (/ 360 27))]
+    (vector
+     (const/yoga (mod idx 27))
+     (mod idx 1))
+    ))
+
+(get-yoga (js/Date. 2022 7 9 4 25))
+;; => ["Vaidhriti" 0.8487604555621928]
+
+
+                                        ; Karana
+(* 2 (mod 0.6 0.5))
+(defn get-karana [dt]
+  (let [ti (.indexOf const/tithis (first (get-tithi dt)))
+        idx (if (> (last (get-tithi dt)) 0.5) 1 0)
+        fct (* 2 (mod (last (get-tithi dt)) 0.5))]
+    (vector
+     ((const/karana-to-tithi ti) idx)
+     fct)))
+
+(get-karana (js/Date.))
+;; => ["Bava" 0.44234072077053455]
 
 
                                         ; Masa
@@ -160,10 +198,13 @@
                                         ; For Date Time
 (defn for-dt [dt]
   (hash-map :tithi (get-tithi dt)
-            :sun {:naks (get-nakshatra "Sun" dt)
-                  :rashi (get-rashi "Sun" dt)}
+            :vaara (get-vaara dt)
+            :yoga (get-yoga dt)
+            :karana (get-karana dt)
             :moon {:naks (get-nakshatra "Moon" dt)
                    :rashi (get-rashi "Moon" dt)}
+            :sun {:naks (get-nakshatra "Sun" dt)
+                  :rashi (get-rashi "Sun" dt)}
             :masa (get-masa dt)))
 
 (for-dt (new js/Date 2005 7 16 11 26))

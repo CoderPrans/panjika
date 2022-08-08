@@ -59,7 +59,11 @@
    [:p (cond
          (= strg "Maasa: ") [:span {:style {:margin-right "42px"}}
                              (keyw (:panjika @store))]
+         ;; (= strg "Vaara: ") [:span {:style {:margin-right "42px"}}
+                             ;; (keyw (:panjika @store))]
          (= strg "Tithi: ") (position (keyw (:panjika @store)))
+         (= strg "Yoga: ") (position (keyw (:panjika @store)))
+         (= strg "Karana: ") (position (keyw (:panjika @store)))
          :else [:p
                 (let [{:keys [naks rashi]} (keyw (:panjika @store))]
                   [:p [:p (position naks)] [:p (position rashi)]])])]])
@@ -127,12 +131,17 @@
 
    [:div.wrapper
     [:div {:style {:margin-bottom "8px"}}
-     (segment-view "Maasa: " :masa)]
+     (segment-view "Maasa: " :masa)
+     ;; (segment-view "Vaara: " :vaara)
+     ]
     (segment-view "Tithi: " :tithi)
     [:p {:style {:padding-left "18px"}} ".........."]
     (segment-view "Moon: " :moon)
     [:p {:style {:padding-left "18px"}} ".........."]
     (segment-view "Sun: " :sun)
+    [:p {:style {:padding-left "18px"}} ".........."]
+    (segment-view "Yoga: " :yoga)
+    (segment-view "Karana: " :karana)
     ]])
 
 
