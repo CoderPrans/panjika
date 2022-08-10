@@ -234,8 +234,9 @@
     (rashi-to-x (const/rashis (if (> index 0) index (+ 12 index))) 3)
     ))
 
-(get-lagna (js/Date.))
-;; => "Makara (Cap.)"
+(get-lagna (js/Date. 1996 4 26 14 35))
+;; => "Kanya (Vir.)"
+
 
 (defn get-rahu-ketu [dt]
   (let [{t :time k :kind} (js-parse (astronomy/SearchMoonNode dt))

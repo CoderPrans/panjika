@@ -9,12 +9,24 @@ html, body {
   margin: 0;
   /* padding-top: 22px; */
   -webkit-font-smoothing: antialiased;
-  font-size: 15px;
+  font-size: 14px;
   color: #f3f3f3;
   box-sizing: border-box;
   /* line-height: 1.5em; */
+  overflow: auto;
 }
 
+
+#app {
+    height: 100%;
+}
+
+
+@media screen and (max-height: 670px) {
+    #app {
+	height: 110%;
+    }
+}
 h2 {
     font-size: 2em;
     margin: 0;
@@ -41,6 +53,7 @@ h2 {
 
 .flex {
     margin: 5px;
+    padding-bottom: 20px;
 }
 ::-webkit-calendar-picker-indicator { background:#f3f3f3; }
 .set-date {
