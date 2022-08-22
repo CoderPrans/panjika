@@ -21,10 +21,9 @@ npx shadow-cljs browser-repl
 - [X] Add basic Bhaava Chakra.
 - [ ] Make this a PWA.
 #### Chart
-- [ ] Show the Ecliptic Line.
-- [ ] Ayanaamsa, 0deg of Raasis on X-Axis.
-- [ ] Sun & Moon coordinates next to their scatter dot.
-- [ ] Full Moon & New Moon lines to indicate phases.
+- [X] Show the Ecliptic Line.
+- [X] Ayanaamsa, 0deg of Raasis on X-Axis.
+- [X] Full Moon & New Moon lines to indicate phases.
 - [ ] Lunar Nodes (Maybe ?)
 - [ ] Make it expandable & downloadable.
 #### Bhaava Chakra

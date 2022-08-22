@@ -24,7 +24,7 @@ html, body {
 
 @media screen and (max-height: 670px) {
     #app {
-	height: 110%;
+	height: 130%;
     }
 }
 h2 {
