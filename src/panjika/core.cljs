@@ -104,14 +104,13 @@
 
    [set-time]
 
-   [chart/chart-component (:date-now @store)]
-
    [:span.chakra {:on-click #(swap! store assoc :chakra
                                     (not (@store :chakra)))}
     "☸"]
 
    [:div.chakra-grid
-    {:style {:opacity (when-not (@store :chakra) 0)}}
+    {:style {:height (when-not (@store :chakra) 0)
+             :padding (when-not (@store :chakra) 0)}}
     (let [lagna (into [] (calc/lagna-chart (@store :date-now)))]
       (for [i (range 25)]
         (let [pada (get lagna (.indexOf const/house_box
@@ -129,20 +128,25 @@
                      (last pada)))])))]
 
 
-   [:div.wrapper
-    [:div {:style {:margin-bottom "8px"}}
-     (segment-view "Maasa: " :masa)
-     (segment-view "Vaara: " :vaara)
-     ]
-    (segment-view "Tithi: " :tithi)
-    [:p {:style {:padding-left "18px"}} ".........."]
-    (segment-view "Moon: " :moon)
-    [:p {:style {:padding-left "18px"}} ".........."]
-    (segment-view "Sun: " :sun)
-    [:p {:style {:padding-left "18px"}} ".........."]
-    (segment-view "Yoga: " :yoga)
-    (segment-view "Karana: " :karana)
-    ]])
+   [:div {:style {:display "flex" :flex-wrap "wrap" :align-items "center"
+                  :justify-content "space-around"
+                  :flex-direction "row-reverse"}}
+    [chart/chart-component (:date-now @store)]
+
+    [:div.wrapper
+     [:div {:style {:margin-bottom "8px"}}
+      (segment-view "Maasa: " :masa)
+      (segment-view "Vaara: " :vaara)
+      ]
+     (segment-view "Tithi: " :tithi)
+     [:p {:style {:padding-left "18px"}} ".........."]
+     (segment-view "Moon: " :moon)
+     [:p {:style {:padding-left "18px"}} ".........."]
+     (segment-view "Sun: " :sun)
+     [:p {:style {:padding-left "18px"}} ".........."]
+     (segment-view "Yoga: " :yoga)
+     (segment-view "Karana: " :karana)
+     ]]])
 
 
 ;; -------------------------
