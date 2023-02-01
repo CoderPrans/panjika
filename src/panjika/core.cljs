@@ -16,7 +16,8 @@
     (r/atom {:date-now date-now
              :lapse 1
              :panjika (calc/for-dt date-now)
-             :chakra false})))
+             :chakra false
+             :chart false})))
 
 
 (defn set-time []
@@ -131,7 +132,14 @@
    [:div {:style {:display "flex" :flex-wrap "wrap" :align-items "center"
                   :justify-content "space-around"
                   :flex-direction "row-reverse"}}
-    [chart/chart-component (:date-now @store)]
+    [:div
+     {:style {:position "absolute" :top "130px" :right "15px"}
+      :on-click #(swap! store assoc :chart (not (@store :chart)))}
+     [:span (if (@store :chart) "⏲" "∿")]]
+
+    [:div (if (:chart @store)
+            [chart/chart-component (:date-now @store)]
+            [chart/clock (:date-now @store)])]
 
     [:div.wrapper
      [:div {:style {:margin-bottom "8px"}}
