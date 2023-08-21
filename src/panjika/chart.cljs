@@ -83,8 +83,7 @@
   (let [ay calc/ayanaamsa]
     (* -1 (if (< deg ay)
             (+ (- 0 ay) deg)
-            (abs (- deg ay))))))
-
+            (- (- deg ay))))))
 (defn clock [dt]
   [:div#root
    [:ul#clock
@@ -102,20 +101,20 @@
 ;; => #js {:z 100, :ra 112, :dec 25.69816874193139}
 
 (subs (nth (re-seq #"\([A-Za-z\.]+\)" "Mesha (Ari.)") 0) 1 4)
-(abs (- calc/ayanaamsa (:ra (calc/js-parse (get-data "Moon" (new js/Date 2023 0 26 3 55))))
+(- (- calc/ayanaamsa (:ra (calc/js-parse (get-data "Moon" (new js/Date 2023 0 26 3 55))))
         )
      )
 
-(abs (- 359 24))
-(abs (- 0 24))
-(abs (- 1 24))
-(abs (- 24 24))
-(abs (- 30 24))
+(- (- 359 24))
+(- (- 0 24))
+(- (- 1 24))
+(- (- 24 24))
+(- (- 30 24))
 
 ((fn [deg]
    (if (< deg 24)
      (+ -24 deg)
-     (abs (- deg 24))))
+     (- (- deg 24))))
  2
  )
 
