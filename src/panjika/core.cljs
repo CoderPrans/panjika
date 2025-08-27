@@ -8,6 +8,11 @@
       [panjika.const :as const]))
 
 ;; -------------------------
+;; TODO:
+;; 1. Clock UI
+;; 2. Date Input/Update
+
+;; -------------------------
 ;; Views
 
 
@@ -21,22 +26,13 @@
 
 
 (defn set-time []
-  (let [in-val (r/atom nil)
-        setting (r/atom false)]
-    (fn []
-      [:div {:style {:display "flex" :justify-content "center" :margin "30px"}}
-       (if @setting
-         [:input.set-date {:type "datetime-local"
-                           :value @in-val :step 1
-                           :on-change (fn [e] (reset! in-val (.-value (.-target e))))}]
-         [:p.set-date {:style {:margin 0}} (.toLocaleString (:date-now @store))])
-       [:button.date-btn {:on-click (fn [e] (if @setting
-                                              (do (reset! setting false)
-                                                  (swap! store assoc
-                                                         :date-now (js/Date. @in-val)))
-                                              (reset! setting true)))}
-        (if @setting "Submit" "Change")]])))
-
+  [:div {:style {:display "flex" :justify-content "center" :margin "30px"}}
+   [:input.set-date {:type "datetime-local"
+                     :value (subs (.toISOString (:date-now @store)) 0 16)
+                     :on-change (fn [e] (swap! store assoc
+                                               :date-now (js/Date. (.-value (.-target e))))
+                                  )}]
+   ])
 
 (defn progress [flt]
   [:div#progress-circle
@@ -68,8 +64,6 @@
          :else [:p
                 (let [{:keys [naks rashi]} (keyw (:panjika @store))]
                   [:p [:p (position naks)] [:p (position rashi)]])])]])
-
-
 
 (defonce timer (js/setInterval
           #(let [up-date (js/Date.

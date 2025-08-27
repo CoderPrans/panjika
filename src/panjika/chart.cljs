@@ -16,9 +16,6 @@
                       (:ra (eq body))))
          "dec" (:dec (eq body))}))
 
-(get-data "Moon" (js/Date.))
-;; => #js {:z 100, :ra 112, :dec 25.707943041639826}
-
 (defn get-edata [body dt]
   #js {"body" body
        "lon" (:lon (calc/eclipticCoor body dt))
@@ -79,44 +76,36 @@
     ]
    ])
 
-(defn han-di [deg]
+#_(defn han-di [deg]
   (let [ay calc/ayanaamsa]
     (* -1 (if (< deg ay)
             (+ (- 0 ay) deg)
             (- (- deg ay))))))
+
 (defn clock [dt]
-  [:div#root
+  [:div
    [:ul#clock
-    (map #(do [:li.numbers [:span (subs (nth (re-seq #"\([A-Za-z\.]+\)" %) 0) 1 4) ]]) const/rashis)
-    [:li#sun {:style {:transform (str "rotate(" (han-di (:ra (calc/js-parse (get-data "Sun" dt))))"deg)")}}]
-    [:li#moon {:style {:transform (str "rotate(" (han-di (:ra (calc/js-parse (get-data "Moon" dt))))"deg)")}}]
+    (map #(do [:li.numbers {:key %} [:span (first (.split % " "))]]) const/rashis)
+    [:li#sun {:style {:transform (str "rotate(" #_(han-di) (:ra (calc/js-parse (get-data "Sun" dt)))"deg)")}} (:ra (calc/js-parse (get-data "Sun" dt)))]
+    [:li#moon {:style {:transform (str "rotate(" #_(han-di) (:ra (calc/js-parse (get-data "Moon" dt)))"deg)")}}]
     ]
    ])
 
 (comment
+    (get-data "Moon" (js/Date.))
+    ;; => #js {:z 100, :ra 112, :dec 25.69816874193139}
 
-  (* 17 14)
-
-(get-data "Moon" (js/Date.))
-;; => #js {:z 100, :ra 112, :dec 25.69816874193139}
-
-(subs (nth (re-seq #"\([A-Za-z\.]+\)" "Mesha (Ari.)") 0) 1 4)
-(- (- calc/ayanaamsa (:ra (calc/js-parse (get-data "Moon" (new js/Date 2023 0 26 3 55))))
+    (- (- calc/ayanaamsa (:ra (calc/js-parse (get-data "Moon" (new js/Date 2023 0 26 3 55))))
+            )
         )
-     )
 
-(- (- 359 24))
-(- (- 0 24))
-(- (- 1 24))
-(- (- 24 24))
-(- (- 30 24))
+    ((fn [deg]
+    (if (< deg 24)
+        (+ -24 deg)
+        (- (- deg 24))))
+    2
+    )
 
-((fn [deg]
-   (if (< deg 24)
-     (+ -24 deg)
-     (- (- deg 24))))
- 2
- )
-
+    (/ (* 3.14 2 220) 12)
   )
 
