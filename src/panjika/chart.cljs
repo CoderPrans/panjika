@@ -1,6 +1,5 @@
 (ns panjika.chart
   (:require
-   [reagent.core :as r]
    ["recharts" :as re]
    ["astronomy-engine" :as astronomy]
    [panjika.calc :as calc]
@@ -62,7 +61,7 @@
     [:> re/YAxis {:type "number" :domain #js [-35 35] :dataKey "dec"
                   :ticks [0] :tick tick-style :tickFormatter #(format-tick %)}]
     [:> re/ZAxis {:dataKey "z" :range [1 380]}]
-    [:> re/Line {:type "monotone" :dataKey "dec" :stroke "#666666"}]
+    [:> re/Line {:type "monotone" :dataKey "dec" :stroke "#666666" :dot false}]
     [:> re/ReferenceLine {:x (mod (+ 180 (:ra (calc/js-parse (get-data "Sun" dt)))) 360)
                           :stroke "#f3f3f3" :label {:fill "#fefcd7" :value "Full Moon"
                                                     :fontSize "9px" :position "insideTop"}
@@ -85,9 +84,9 @@
 (defn clock [dt]
   [:div
    [:ul#clock
-    (map #(do [:li.numbers {:key %} [:span (first (.split % " "))]]) const/rashis)
-    [:li#sun {:style {:transform (str "rotate(" #_(han-di) (:ra (calc/js-parse (get-data "Sun" dt)))"deg)")}} (:ra (calc/js-parse (get-data "Sun" dt)))]
-    [:li#moon {:style {:transform (str "rotate(" #_(han-di) (:ra (calc/js-parse (get-data "Moon" dt)))"deg)")}}]
+    (map #(do [:li.numbers {:key %} [:span [:span (first (.split % " "))]]]) const/rashis)
+    [:li#sun {:style {:transform (str "rotate(" #_(han-di) (- (:ra (calc/js-parse (get-data "Sun" dt))) calc/ayanaamsa)"deg)")}}]
+    [:li#moon {:style {:transform (str "rotate(" #_(han-di) (- (:ra (calc/js-parse (get-data "Moon" dt))) calc/ayanaamsa)"deg)")}}]
     ]
    ])
 

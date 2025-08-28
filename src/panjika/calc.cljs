@@ -96,7 +96,9 @@
         index (/ to-mesha 30)]
     (vector
      (const/rashis (if (> index 0) index (+ 12 index)))
-     (mod index 1))))
+     (mod index 1)
+     to-mesha
+     )))
 
 (get-rashi "Sun" (js/Date.))
 ;; => ["Mithuna (♊︎ Gem.)" 0.32826329039507796]

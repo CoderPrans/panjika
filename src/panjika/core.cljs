@@ -24,13 +24,31 @@
              :chakra false
              :chart false})))
 
+(defn format-date [dt]
+  (let [pad #(.padStart (.toString %) 2 "0")]
+    (str (.getFullYear dt) "-"
+         (pad (inc (.getMonth dt))) "-"
+         (pad (.getDate dt)) "T"
+         (pad (.getHours dt)) ":"
+         (pad (.getMinutes dt)))))
+
+(defn safe-date [s]
+  (try
+    (let [d (js/Date. s)]
+      (when (not (js/isNaN (.getTime d))) d))
+    (catch :default _ nil)))
+
+(safe-date (js/Date. 2025 1 30))
+;; => #inst "2025-03-01T18:30:00.000-00:00"
 
 (defn set-time []
   [:div {:style {:display "flex" :justify-content "center" :margin "30px"}}
    [:input.set-date {:type "datetime-local"
-                     :value (subs (.toISOString (:date-now @store)) 0 16)
-                     :on-change (fn [e] (swap! store assoc
-                                               :date-now (js/Date. (.-value (.-target e))))
+                     :value (format-date (:date-now @store))
+                     :on-change (fn [e] 
+                                  (when-let [d (safe-date (.-value (.-target e)))]
+                                    (swap! store assoc
+                                           :date-now d))
                                   )}]
    ])
 
@@ -48,8 +66,7 @@
   [:span {:style {:display "flex" :align-items "flex-start"
                   :justify-content "flex-end" :margin-bottom "7px"}}
    [:span {:style {:margin-right "12px"}} txt]
-   (progress fctr)]
-  )
+   (progress fctr)])
 
 (defn segment-view [strg keyw]
   [:div {:class "flex"} [:p strg]
@@ -93,7 +110,7 @@
                                            astronomy/MoonPhase (/ 12) 
                                            Math/ceil (- 15) Math/abs (/ 15))]
                                 (str "linear-gradient(130deg,#000608 " (* fct 100) "%,#0b2f4f"))}}
-   [:h2 {:style {:padding-right "128px" :text-align "center"}} "Panjika"]
+   [:h2 {:style {:padding "45px 0 0 55px"}} "Panjika"]
    
    [time-lapse]
 
